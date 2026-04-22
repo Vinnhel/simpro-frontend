@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMPRO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ LEFT PANEL ══ -->
+  <div class="panel-left">
+    <div class="panel-text">
+      <h1>Selamat datang di SIMPRO.</h1>
+      <p>Sistem Informasi Manajemen Produksi<br>dan Distribusi untuk UMKM Tahu Bulat<br>dan Sotong Lazer</p>
+    </div>
+  </div>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <div class="panel-right">
+
+    <!-- Logo -->
+    <div class="topbar">
+      <div class="logo-icon">
+        <img src="img/logo-simpro.png" alt="SIMPRO Logo" width="34" height="34">
+      </div>
+      <span class="logo-wordmark">SIMPRO</span>
+    </div>
+
+    <!-- Form -->
+    <div class="form-area">
+      <p class="welcome-line">Welcome to <span>SIMPRO</span></p>
+
+      <!-- Tab switcher -->
+      <div class="tab-bar" id="tabBar">
+        <div class="tab-pill" id="tabPill"></div>
+        <button class="tab-btn active" id="btnMasuk"  onclick="switchTab('masuk')">Masuk</button>
+        <button class="tab-btn"        id="btnDaftar" onclick="switchTab('daftar')">Daftar</button>
+      </div>
+
+      <p class="tagline">Kelola produksi, distribusi, dan keuntungan UMKM Anda dalam satu sistem terintegrasi</p>
+
+      <div class="forms-container" id="formsContainer">
+
+        <!-- FORM LOGIN -->
+        <div class="form-slide visible" id="formMasuk">
+          <div class="field">
+            <label>User name</label>
+            <div class="input-wrap no-icon">
+              <input type="text" placeholder="Masukkan Username" autocomplete="username">
+            </div>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <div class="input-wrap">
+              <input type="password" id="passLogin" placeholder="Masukkan Password" autocomplete="current-password">
+              <button class="eye-btn" onclick="togglePass('passLogin', this)" type="button" aria-label="Tampilkan atau sembunyikan password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="row-options">
+            <label class="checkbox-label">
+              <input type="checkbox">
+              <span class="custom-cb">
+                <svg class="check" width="9" height="9" viewBox="0 0 9 9" fill="none">
+                  <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              Ingat Saya
+            </label>
+            <a class="forgot-link" href="#">Lupa Password ?</a>
+          </div>
+          <div class="btn-row-login">
+            <button class="btn-submit">Masuk ke Sistem</button>
+          </div>
+        </div>
+
+        <!-- FORM DAFTAR -->
+        <div class="form-slide hidden go-right" id="formDaftar">
+          <div class="field">
+            <label>Email Address</label>
+            <div class="input-wrap no-icon">
+              <input type="email" placeholder="Masukkan Email" autocomplete="email">
+            </div>
+          </div>
+          <div class="field">
+            <label>User name</label>
+            <div class="input-wrap no-icon">
+              <input type="text" placeholder="Masukkan Username" autocomplete="username">
+            </div>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <div class="input-wrap">
+              <input type="password" id="passRegister" placeholder="Masukkan Password" autocomplete="new-password">
+              <button class="eye-btn" onclick="togglePass('passRegister', this)" type="button" aria-label="Tampilkan atau sembunyikan password">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="spacer-bottom"></div>
+          <div class="btn-row-register">
+            <button class="btn-submit">Daftar Akun</button>
+          </div>
+        </div>
+
+      </div><!-- /forms-container -->
+    </div><!-- /form-area -->
+  </div><!-- /panel-right -->
+</div><!-- /page -->
+
+<script src="script.js"></script>
+</body>
+</html>
