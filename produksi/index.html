@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIMPRO – Perhitungan Perkiraan Jumlah Produk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ══ NAVIGASI ══ -->
+<nav>
+  <div class="nav-logo">
+  <img src="logo-simpro-produksi.png" alt="SIMPRO" height="32"/>
+  SIMPRO
+</div>
+  <ul class="nav-links">
+    <li><a href="#">Beranda</a></li>
+    <li><a href="#">Produksi</a></li>
+    <li><a href="#">Distribusi</a></li>
+    <li><a href="#">Laporan Keuntungan</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-icon" title="Profil">
+  <svg width="28" height="28" fill="none" stroke="#8b3a3a" stroke-width="1.5" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="8" r="3"/>
+    <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+  </svg>
+</button>
+    <button class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <h1>Perhitungan Perkiraan<br>Jumlah Produk</h1>
+  <p>Hitung estimasi jumlah produk yang dapat dihasilkan berdasarkan ketersediaan bahan baku</p>
+</div>
+
+<!-- ══ KONTEN UTAMA ══ -->
+<main>
+
+  <!-- Pilih Produk -->
+  <div class="section-produk">
+    <h2>Pilih Produk</h2>
+    <p>Pilih produk yang akan dihitung.</p>
+    <div class="select-wrap">
+      <select id="produkSelect" onchange="renderTable()">
+        <option value="">Pilihan Produk</option>
+        <option value="tahu_bulat_cimol">Tahu Bulat Cimol</option>
+        <option value="tahu_bulat_standar">Tahu Bulat Standar</option>
+        <option value="tahu_bulat_jumbo">Tahu Bulat Jumbo</option>
+        <option value="sotong">Sotong</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabel Bahan Baku -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nama Bahan</th>
+          <th>Satuan</th>
+          <th>Kebutuhan</th>
+          <th>Harga</th>
+          <th>Stok Tersedia</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Diisi oleh JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tombol Hitung & Reset -->
+  <div class="btn-row">
+    <button class="btn-hitung" onclick="hitung()">Hitung</button>
+    <button class="btn-reset" onclick="reset()">Reset</button>
+  </div>
+
+  <!-- Hasil Perhitungan -->
+  <div class="section-hasil">
+    <h2>Hasil Perhitungan</h2>
+
+    <div class="hasil-box">
+      <div class="hasil-row">
+        <span class="hasil-label">Estimasi Jumlah Produk</span>
+        <div class="hasil-value" id="outEstimasi"></div>
+      </div>
+      <div class="hasil-row">
+        <span class="hasil-label">Total Biaya Produksi</span>
+        <div class="hasil-value" id="outBiaya"></div>
+      </div>
+    </div>
+
+    <div class="btn-simpan-wrap">
+      <button class="btn-simpan" onclick="simpan()">Simpan Hasil Perhitungan</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer>SIMPRO v1.0 © 2026</footer>
+
+<!-- Toast notifikasi -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
