@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIMPRO</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container nav-container">
+
+    <!-- LEFT -->
+    <div class="nav-left">
+      <img src="assets/logo-simpro.png" class="logo">
+      <span class="brand">SIMPRO</span>
+    </div>
+
+    <!-- CENTER -->
+    <nav class="nav-menu">
+      <a href="index.html">Beranda</a>
+      <a href="#">Produksi</a>
+      <a href="#">Distribusi</a>
+      <a href="#">Laporan Keuntungan</a>
+    </nav>
+
+    <!-- RIGHT -->
+    <div class="nav-right">
+      <div class="profile">
+        <svg width="16" height="16" fill="none" stroke="#A64B4B" stroke-width="2">
+          <circle cx="8" cy="5" r="3"/>
+          <path d="M2 14c0-3 3-5 6-5s6 2 6 5"/>
+        </svg>
+      </div>
+
+      <button class="btn-logout" onclick="logout()">
+        Keluar
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="container hero-content">
+
+    <div class="hero-text">
+      <h1>Kelola Produksi & Distribusi UMKM</h1>
+      <h2>Lebih Mudah dengan SIMPRO</h2>
+      <p>
+        Solusi digital untuk perencanaan stok bahan baku, pelacakan distribusi produk,
+        dan visualisasi keuntungan bulanan.
+      </p>
+      <button class="btn-primary">Mulai</button>
+    </div>
+
+    <div class="hero-img">
+      <img src="assets/homepage-illust-1.png" alt="">
+    </div>
+
+  </div>
+</section>
+
+<!-- SOLUSI -->
+<section id="solusi" class="solusi">
+  <div class="container">
+
+    <h2 class="section-title">Solusi Untuk</h2>
+    <p class="section-sub">
+      Membantu operasional UMKM produksi makanan agar lebih terstruktur.
+    </p>
+
+    <!-- ITEM 1 -->
+    <div class="solusi-item">
+      <div class="solusi-img">
+        <img src="assets/homepage-illust-2.png">
+      </div>
+      <div class="solusi-text">
+        <h3>Perencanaan Produksi</h3>
+        <p>
+          Hitung estimasi jumlah produk berdasarkan ketersediaan bahan baku.
+        </p>
+        <button class="btn-primary">Mulai</button>
+      </div>
+    </div>
+
+    <!-- ITEM 2 -->
+    <div class="solusi-item">
+      <div class="solusi-img">
+        <img src="assets/homepage-illust-3.png">
+      </div>
+      <div class="solusi-text">
+        <h3>Manajemen Distribusi</h3>
+        <p>
+          Catat pengiriman ke pelanggan dan pantau status produk.
+        </p>
+        <button class="btn-primary">Mulai</button>
+      </div>
+    </div>
+
+    <!-- ITEM 3 -->
+    <div class="solusi-item">
+      <div class="solusi-img">
+        <img src="assets/homepage-illust-4.png">
+      </div>
+      <div class="solusi-text">
+        <h3>Analisis Keuntungan</h3>
+        <p>
+          Visualisasi keuntungan berdasarkan data distribusi.
+        </p>
+        <button class="btn-primary">Mulai</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="testimoni">
+  <div class="container testimoni-wrapper">
+
+    <div class="testi-img">
+      <img src="assets/client-photo.png" alt="">
+    </div>
+
+    <div class="testi-text">
+      <p>
+        Dulu saya sering bingung menghitung sisa tahu dan tanggal kedaluwarsa.
+        Dengan SIMPRO, semua data produksi dan distribusi tercatat rapi. 
+        Saya jadi tahu untuk untung bersih tiap bulan tanpa perlu hitung manual lagi.
+      </p>
+
+      <h4>Ibu Lasiati</h4>
+      <span>Pemilik UMKM Tahu Bulat & Sotong Lazer</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- CARA KERJA -->
+<section class="cara">
+  <div class="container">
+
+    <h2 class="section-title">Cara Kerja SIMPRO</h2>
+    <p class="section-sub">
+      Berikut adalah langkah - langkah mudah untuk menggunakan SIMPRO
+    </p>
+
+    <div class="cara-wrapper">
+
+      <!-- CARD 1 -->
+      <div class="cara-card">
+        <img src="assets/cara-kerja-photo-1.png" alt="">
+        <div class="cara-overlay">
+          <p>Masukkan data bahan baku dan resep</p>
+          <span>Mulai →</span>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="cara-card">
+        <img src="assets/cara-kerja-photo-2.png" alt="">
+        <div class="cara-overlay">
+          <p>Catat pengiriman & update status (Belum/Sedang/Sudah Dikirim).</p>
+          <span>Mulai →</span>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="cara-card">
+        <img src="assets/cara-kerja-photo-3.png" alt="">
+        <div class="cara-overlay">
+          <p>Pantau grafik keuntungan otomatis.</p>
+          <span>Mulai →</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+ <section class="cta">
+  <div class="container cta-content">
+    <h2>Siap Meningkatkan Efisiensi<br>Usaha Anda?</h2>
+    <button class="btn-primary">Mulai Gratis →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-wrapper">
+
+    <!-- LEFT -->
+    <div class="footer-brand">
+      <h3>SIMPRO</h3>
+      <p>© 2026 SIMPRO.<br>All rights reserved</p>
+
+      <div class="socials">
+        <span>●</span>
+        <span>●</span>
+        <span>●</span>
+        <span>●</span>
+      </div>
+    </div>
+
+    <!-- COMPANY -->
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About us</a>
+      <a href="#">Blog</a>
+      <a href="#">Contact us</a>
+      <a href="#">Pricing</a>
+      <a href="#">Testimonials</a>
+    </div>
+
+    <!-- SUPPORT -->
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="#">Help center</a>
+      <a href="#">Terms of service</a>
+      <a href="#">Legal</a>
+      <a href="#">Privacy policy</a>
+      <a href="#">Status</a>
+    </div>
+
+    <!-- SUBSCRIBE -->
+    <div class="footer-col">
+      <h4>Stay up to date</h4>
+
+      <div class="subscribe">
+        <input type="email" placeholder="Your email address">
+        <button>➤</button>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+:root {
+  --primary: #A64B4B;
+  --bg: #F9F5F2;
+  --text: #333;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* NAVBAR */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: #F9F5F2; /* ✅ samakan dengan hero */
+  padding: 18px 0;     /* sedikit lebih tinggi */
+  z-index: 1000;
+}
+
+/* CONTAINER */
+.nav-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* LEFT */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 28px;   /* sebelumnya terlalu kecil */
+  height: auto;
+}
+
+.brand {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f; /* lebih gelap biar nggak pucet */
+}
+
+/* MENU */
+.nav-menu {
+  display: flex;
+  gap: 32px;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  font-size: 14px;
+  color: #2d2d2d; 
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-menu a:hover {
+  color: #A64B4B;
+}
+
+/* RIGHT */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* PROFILE */
+.profile {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #A64B4B;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* BUTTON */
+.btn-logout {
+  background: #A64B4B;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-logout:hover {
+  background: #8c3e3e;
+  transform: scale(1.05);
+}
+
+/* RESPONSIVE NAVBAR */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+  }
+
+  .brand {
+    display: none;
+  }
+}
+
+/* HERO */
+.hero-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 60px 0;
+}
+
+.hero h2 {
+  color: var(--primary);
+}
+
+/* SOLUSI */
+.solusi-item {
+  display: flex;
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.solusi-img img {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* SECTION BACKGROUND */
+.testimoni {
+  position: relative;
+  background: linear-gradient(
+    to right,
+    #EADCDC 0%,   /* 🔥 lebih merah */
+    #F3E7E7 40%,
+    #F9F5F2 100%
+  );
+  padding: 70px 0;
+}
+
+/* WRAPPER */
+.testimoni-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* IMAGE */
+.testi-img img {
+  width: 260px;
+  border-radius: 12px;
+}
+
+/* TEXT */
+.testi-text p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.testi-text h4 {
+  color: #A64B4B;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.testi-text span {
+  font-size: 12px;
+  color: #888;
+}
+
+/* CARA */
+.cara-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 60px;
+}
+
+/* BUTTON */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  background: #8c3e3e;
+}
+
+/* ANIMATION */
+.fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.6s;
+}
+
+.fade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-content,
+  .solusi-item,
+  .testi-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cara-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SECTION */
+.cara {
+  padding: 70px 0;
+  text-align: center;
+}
+
+/* TITLE */
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.section-sub {
+  font-size: 12px;
+  color: #8a8a8a;
+  margin-bottom: 35px;
+}
+
+/* GRID */
+.cara-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px; /* lebih rapat */
+}
+
+/* CARD */
+.cara-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* IMAGE */
+.cara-card img {
+  width: 100%;
+  height: 220px; /* 🔥 biar konsisten */
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* OVERLAY */
+.cara-overlay {
+  position: absolute;
+  bottom: 12px; /* 🔥 naik sedikit */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 78%; /* 🔥 lebih kecil */
+  background: #F6F2F0; /* 🔥 lebih soft */
+
+  padding: 14px;
+  border-radius: 10px;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06); /* 🔥 lebih halus */
+}
+
+/* TEXT */
+.cara-overlay p {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+/* CTA */
+/* CTA SECTION */
+.cta {
+  background: #F3E7E7; /* 🔥 warna pink soft */
+  padding: 80px 0 70px;
+  text-align: center;
+}
+
+/* TEXT */
+.cta h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2d2d2d;
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+/* BUTTON */
+.cta .btn-primary {
+  background: #A64B4B;
+  padding: 12px 26px;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.cta .btn-primary:hover {
+  background: #8c3e3e;
+  transform: scale(1.05);
+}
+
+/* FOOTER */
+.footer {
+  background: #1f2a30; /* 🔥 warna gelap */
+  color: #ccc;
+  padding: 60px 0;
+  font-size: 13px;
+}
+
+/* WRAPPER */
+.footer-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+}
+
+/* BRAND */
+.footer-brand h3 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.footer-brand p {
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* SOCIAL */
+.socials span {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background: #2f3a40;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* COLUMN */
+.footer-col h4 {
+  color: white;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  color: #aaa;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+
+.footer-col a:hover {
+  color: white;
+}
+
+/* SUBSCRIBE */
+.subscribe {
+  display: flex;
+  background: #2a353b;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.subscribe input {
+  border: none;
+  padding: 10px;
+  flex: 1;
+  background: transparent;
+  color: white;
+  outline: none;
+}
+
+.subscribe button {
+  background: #A64B4B;
+  border: none;
+  color: white;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .footer-wrapper {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .subscribe {
+    justify-content: center;
+  }
+}

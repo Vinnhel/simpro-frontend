@@ -57,3 +57,48 @@ function togglePass(id, btn) {
 
 window.addEventListener('load', function() { pill('masuk'); });
 window.addEventListener('resize', function() { pill(cur); });
+
+function handleLogin() {
+  const username = document.querySelector("#formMasuk input[type='text']").value;
+  const password = document.querySelector("#formMasuk input[type='password']").value;
+
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+
+  if (!storedUser) {
+    alert("Belum ada akun, silakan daftar dulu!");
+    return;
+  }
+
+  if (username === storedUser.username && password === storedUser.password) {
+    localStorage.setItem("isLogin", "true");
+    window.location.href = "../dashboard/index.html";
+  } else {
+    alert("Username atau password salah!");
+  }
+}
+
+function handleRegister() {
+  const username = document.querySelector("#formDaftar input[type='text']").value;
+  const email = document.querySelector("#formDaftar input[type='email']").value;
+  const password = document.querySelector("#formDaftar input[type='password']").value;
+
+  if (username === "" || email === "" || password === "") {
+    alert("Semua field harus diisi!");
+    return;
+  }
+
+  // Simpan data user (dummy)
+  const user = {
+    username,
+    email,
+    password
+  };
+
+  localStorage.setItem("user", JSON.stringify(user));
+
+  // langsung dianggap login
+  localStorage.setItem("isLogin", "true");
+
+  // redirect ke dashboard
+  window.location.href = "../dashboard/index.html";
+}
