@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tambah Distribusi – SIMPRO</title>
+  <title>Edit Distribusi – SIMPRO</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -20,7 +20,10 @@
 
       <!-- LOGO -->
       <div class="flex items-center gap-2">
-        <img src="assets/logo-simpro.png" alt="Logo SIMPRO" class="w-8 h-8 object-contain">
+        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+          <circle cx="16" cy="16" r="16" fill="#A35D5D"/>
+          <path d="M9 22 L16 10 L23 22" stroke="#fff" stroke-width="2.2"/>
+        </svg>
         <span class="font-display text-xl logo-text">SIMPRO</span>
       </div>
 
@@ -52,7 +55,7 @@
   <!-- HERO -->
   <div class="hero-header py-10 text-center">
     <h1 class="font-display text-4xl mb-5 hero-title">
-      Tambah Distribusi
+      Edit Distribusi
     </h1>
 
     <button onclick="window.location.href='../dashboard/index.html'" class="btn-marun">
@@ -109,7 +112,7 @@
 
         <div class="grid md:grid-cols-2 items-center gap-3">
           <label class="norm">Produk</label>
-          <select id="produk" class="field-input" onchange="handleProdukChange()">
+          <select id="produk" class="field-input" required onchange="handleProdukChange()">
             <option value="" disabled selected>Pilihan Produk</option>
             <option value="tahu_bulat_cimol">Tahu Bulat Cimol</option>
             <option value="tahu_bulat_standar">Tahu Bulat Standar</option>
@@ -120,42 +123,25 @@
 
         <div class="grid md:grid-cols-2 items-center gap-3">
           <label class="norm">Tanggal Produksi</label>
-          <select id="tgl_produksi" class="field-input" onchange="handleTanggalChange()">
+          <select id="tgl_produksi" class="field-input" required onchange="handleTanggalChange()">
             <option value="" disabled selected>Pilihan Tanggal Produksi</option>
           </select>
         </div>
 
-        <!-- TANGGAL KADALUARSA -->
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Perkiraan Tanggal Kadaluarsa</label>
-          <input 
-            id="kadaluarsa"
-            class="field-input field-readonly"
-            placeholder="DD/MM/YY (dihitung otomatis)"
-            readonly
-          />
+          <label class="req">Tanggal Kadaluarsa</label>
+          <input id="kadaluarsa" class="field-input field-readonly" readonly />
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-        <label class="norm">Jumlah Dikirim</label>
-        <input 
-          id="jumlah"
-          type="number"
-          class="field-input"
-          placeholder="Masukkan jumlah dikirim (pastikan tidak melebihi stok)"
-          oninput="hitungTotal()"
-        />
+          <label class="norm">Jumlah Dikirim</label>
+          <input id="jumlah" class="field-input" type="number" min="1"
+                 oninput="hitungTotal()"/>
         </div>
 
-        <!-- TOTAL HARGA -->
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Perkiraan Harga Total Produksi</label>
-          <input 
-            id="total"
-            class="field-input field-readonly"
-            placeholder="RpXXX.XXX (dihitung otomatis)"
-            readonly
-          />
+          <label class="req">Total Harga</label>
+          <input id="total" class="field-input field-readonly" readonly/>
         </div>
 
       </div>
