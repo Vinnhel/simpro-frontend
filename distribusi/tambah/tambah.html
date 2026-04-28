@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tambah Distribusi – SIMPRO</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body class="min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+
+      <!-- LOGO -->
+      <div class="flex items-center gap-2">
+        <img src="assets/logo-simpro.png" alt="Logo SIMPRO" class="w-8 h-8 object-contain">
+        <span class="font-display text-xl logo-text">SIMPRO</span>
+      </div>
+
+      <!-- MENU -->
+      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-600">
+        <a href="../dashboard/index.html" class="nav-link">Beranda</a>
+        <a href="../produksi/index.html" class="nav-link">Produksi</a>
+        <a href="../tambah-distribusi/index.html" class="nav-link">Distribusi</a>
+        <a href="#" class="nav-link">Laporan Keuntungan</a>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="flex items-center gap-3">
+        <button class="icon-btn">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </button>
+
+        <!-- ✅ FIX LOGOUT -->
+        <button onclick="logout()" class="btn-marun text-sm px-4 py-2">
+          Keluar
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-header py-10 text-center">
+    <h1 class="font-display text-4xl mb-5 hero-title">
+      Tambah Distribusi
+    </h1>
+
+    <button onclick="window.location.href='../dashboard/index.html'" class="btn-marun">
+      Kembali
+    </button>
+  </div>
+
+  <!-- MAIN -->
+  <main class="max-w-3xl mx-auto px-4 py-8">
+
+    <!-- DATA PELANGGAN -->
+    <div class="section-card">
+      <h2 class="font-display text-2xl mb-6 section-title">
+        Data Pelanggan
+      </h2>
+
+      <div class="grid gap-5">
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="norm">Nama Pelanggan</label>
+          <input id="nama" required class="field-input" type="text"/>
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="req">Nomor Telepon Pelanggan</label>
+          <input id="telp_pelanggan" required class="field-input" type="tel"/>
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="norm">Nomor Kendaraan</label>
+          <input id="no_kendaraan" class="field-input" type="text"/>
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="req">Nomor Telepon Kondektur</label>
+          <input id="telp_kondektur" required class="field-input" type="tel"/>
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="norm">Lokasi Pengiriman</label>
+          <input id="lokasi" class="field-input" type="text"/>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PRODUK -->
+    <div class="section-card">
+      <h2 class="font-display text-2xl mb-6 section-title">
+        Produk & Stok
+      </h2>
+
+      <div class="grid gap-5">
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="norm">Produk</label>
+          <select id="produk" class="field-input" onchange="handleProdukChange()">
+            <option value="" disabled selected>Pilihan Produk</option>
+            <option value="tahu_bulat_cimol">Tahu Bulat Cimol</option>
+            <option value="tahu_bulat_standar">Tahu Bulat Standar</option>
+            <option value="tahu_bulat_jumbo">Tahu Bulat Jumbo</option>
+            <option value="sotong">Sotong</option>
+          </select>
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="norm">Tanggal Produksi</label>
+          <select id="tgl_produksi" class="field-input" onchange="handleTanggalChange()">
+            <option value="" disabled selected>Pilihan Tanggal Produksi</option>
+          </select>
+        </div>
+
+        <!-- TANGGAL KADALUARSA -->
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="req">Perkiraan Tanggal Kadaluarsa</label>
+          <input 
+            id="kadaluarsa"
+            class="field-input field-readonly"
+            placeholder="DD/MM/YY (dihitung otomatis)"
+            readonly
+          />
+        </div>
+
+        <div class="grid md:grid-cols-2 items-center gap-3">
+        <label class="norm">Jumlah Dikirim</label>
+        <input 
+          id="jumlah"
+          type="number"
+          class="field-input"
+          placeholder="Masukkan jumlah dikirim (pastikan tidak melebihi stok)"
+          oninput="hitungTotal()"
+        />
+        </div>
+
+        <!-- TOTAL HARGA -->
+        <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="req">Perkiraan Harga Total Produksi</label>
+          <input 
+            id="total"
+            class="field-input field-readonly"
+            placeholder="RpXXX.XXX (dihitung otomatis)"
+            readonly
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BUTTON -->
+    <div class="flex justify-center gap-4 pb-10">
+      <button onclick="simpanData()" class="btn-marun px-8 py-2">
+        Simpan
+      </button>
+
+      <button onclick="resetForm()" class="btn-outline px-8 py-2">
+        Reset
+      </button>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer text-center text-xs py-5">
+    SIMPRO v1.0 © 2026
+  </footer>
+
+  <!-- ✅ TOAST FIX -->
+  <div id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
