@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIMPRO – Daftar Stok Produksi</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+  <img src="pict/logo-simpro-stokproduksi.png" alt="SIMPRO" onerror="this.style.display='none'"/> 
+  SIMPRO
+</div>
+  <ul class="nav-links">
+    <li><a href="#">Beranda</a></li>
+    <li><a href="#">Produksi</a></li>
+    <li><a href="#">Distribusi</a></li>
+    <li><a href="#">Laporan Keuntungan</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-icon">
+      <svg width="28" height="28" fill="none" stroke="#8b3a3a" stroke-width="1.5" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+      </svg>
+    </button>
+    <button class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Daftar Stok Produksi</h1>
+  <p>Data hasil perhitungan produksi yang telah disimpan. Ubah jumlah aktual jika diperlukan agar stok tetap akurat.</p>
+  <button class="hero-btn" onclick="alert('Menuju Sejarah Distribusi')">Lihat Sejarah Distribusi</button>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- Tabel Stok -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Tanggal Catat</th>
+          <th>Nama Produk</th>
+          <th>Stok Tersedia</th>
+          <th>Jumlah</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="stokTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Ringkasan Stok -->
+  <h2 class="ringkasan-title">Ringkasan Stok</h2>
+  <div class="ringkasan-box">
+    <div class="ringkasan-row">
+      <span class="ringkasan-label">Tahu Bulat</span>
+      <div class="ringkasan-value" id="ringTahu">—</div>
+    </div>
+    <div class="ringkasan-row">
+      <span class="ringkasan-label">Sotong</span>
+      <div class="ringkasan-value" id="ringSotong">—</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>SIMPRO v1.0 © 2026</footer>
+
+<!-- Modal Edit -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Edit Stok</h3>
+    <label>Nama Produk</label>
+    <input type="text" id="editNama" readonly/>
+    <label>Stok Tersedia</label>
+    <input type="text" id="editStok"/>
+    <label>Jumlah</label>
+    <input type="number" id="editJumlah" min="0"/>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

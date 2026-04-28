@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIMPRO – Sejarah Distribusi</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="img/logo-simpro-sejarahdistribusi.png" alt="" onerror="this.style.display='none'"/>
+    SIMPRO
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">Beranda</a></li>
+    <li><a href="#">Produksi</a></li>
+    <li><a href="#">Distribusi</a></li>
+    <li><a href="#">Laporan Keuntungan</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-icon">
+      <svg width="28" height="28" fill="none" stroke="#8b3a3a" stroke-width="1.5" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+      </svg>
+    </button>
+    <button class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Sejarah Distribusi</h1>
+  <button class="btn-buat" onclick="openModalBuat()">Buat Distribusi Baru</button>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Tanggal Distribusi</th>
+          <th>Pelanggan</th>
+          <th>Tanggal Produksi</th>
+          <th>Jumlah</th>
+          <th></th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="distribusiTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" id="pagination"></div>
+
+</main>
+
+<footer>SIMPRO v1.0 © 2026</footer>
+
+<!-- Modal Edit Distribusi -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Edit Distribusi</h3>
+    <label>Pelanggan</label>
+    <input type="text" id="editPelanggan"/>
+    <label>Jumlah</label>
+    <input type="number" id="editJumlah" min="0"/>
+    <label>Status</label>
+    <select id="editStatus">
+      <option value="Dikirim">Dikirim</option>
+      <option value="Selesai">Selesai</option>
+      <option value="Pending">Pending</option>
+      <option value="Dibatalkan">Dibatalkan</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveEdit()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Buat Distribusi Baru -->
+<div class="modal-overlay" id="modalBuat">
+  <div class="modal">
+    <h3>Buat Distribusi Baru</h3>
+    <label>Tanggal Distribusi</label>
+    <input type="date" id="buatTanggal"/>
+    <label>Pelanggan</label>
+    <input type="text" id="buatPelanggan" placeholder="Nama pelanggan"/>
+    <label>Tanggal Produksi</label>
+    <input type="date" id="buatTanggalProd"/>
+    <label>Jumlah</label>
+    <input type="number" id="buatJumlah" min="0" placeholder="0"/>
+    <label>Status</label>
+    <select id="buatStatus">
+      <option value="Pending">Pending</option>
+      <option value="Dikirim">Dikirim</option>
+      <option value="Selesai">Selesai</option>
+    </select>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeBuat()">Batal</button>
+      <button class="btn-save" onclick="simpanBuat()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
