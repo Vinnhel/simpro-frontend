@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMPRO – Laporan Keuntungan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo-simpro.png" alt="SIMPRO" class="logo-img" />
+      <span>SIMPRO</span>
+    </div>
+
+    <!-- Hamburger (mobile) -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../dashboard/index.html">Beranda</a></li>
+      <li><a href="../produksi/index.html">Produksi</a></li>
+      <li><a href="../stok-produksi/index.html">Distribusi</a></li>
+      <li><a href="#" class="nav-active">Laporan Keuntungan</a></li>
+    </ul>
+
+    <div class="nav-right" id="navRight">
+      <button class="btn-icon" aria-label="Profil">
+        <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="19" cy="19" r="18" stroke="#A64B4B" stroke-width="1.5" fill="#f2e8e8"/>
+          <circle cx="19" cy="15" r="5" stroke="#A64B4B" stroke-width="1.5" fill="none"/>
+          <path d="M8 32c0-6 5-10 11-10s11 4 11 10" stroke="#A64B4B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+</svg>
+      </button>
+      <button class="btn-keluar">Keluar</button>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <header class="hero">
+    <h1>Laporan Keuntungan</h1>
+    <p class="hero-sub">"Grafik keuntungan bulanan berdasarkan data distribusi yang sudah terkirim. Harga jual per produk bersifat tetap."</p>
+  </header>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <main class="main-wrap">
+
+    <!-- Period selector -->
+    <section class="section-period">
+      <h2 class="section-title">Pilih Periode</h2>
+      <p class="section-sub">Pilih periode waktu yang ingin divisualisasikan.</p>
+      <div class="select-wrap">
+        <select id="periodSelect" aria-label="Pilih periode">
+          <option value="bulan-ini">Bulan ini</option>
+          <option value="3-bulan">3 Bulan Terakhir</option>
+          <option value="6-bulan">6 Bulan Terakhir</option>
+          <option value="tahun-ini">Tahun ini</option>
+        </select>
+        <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Chart -->
+    <section class="section-chart">
+      <div class="chart-container">
+        <canvas id="keuntunganChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Detail Table -->
+    <section class="section-detail">
+      <h2 class="detail-title">Detail Data</h2>
+      <div class="table-wrap">
+        <table id="detailTable">
+          <thead>
+            <tr>
+              <th>Bulan</th>
+              <th>Tahu Bulat</th>
+              <th>Sotong</th>
+              <th>Total Terjual</th>
+              <th>Total Keuntungan</th>
+            </tr>
+          </thead>
+          <tbody id="detailBody">
+            <!-- filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Ringkasan -->
+    <section class="section-ringkasan">
+      <h2 class="detail-title">Ringkasan</h2>
+      <div class="ringkasan-card">
+        <div class="ringkasan-row">
+          <span class="ringkasan-label">Total Keuntungan</span>
+          <div class="ringkasan-value" id="sumKeuntungan">Rp 0</div>
+        </div>
+        <div class="ringkasan-row">
+          <span class="ringkasan-label">Total Produk Terjual</span>
+          <div class="ringkasan-value" id="sumProduk">0 pcs</div>
+        </div>
+        <div class="ringkasan-row">
+          <span class="ringkasan-label">Rata - rata / Hari</span>
+          <div class="ringkasan-value" id="avgHari">Rp 0</div>
+        </div>
+      </div>
+      <p class="catatan">Catatan: Data hanya menghitung distribusi dengan status "Sudah Dikirim"</p>
+      <div class="export-row">
+        <button class="btn-export" id="btnExport">Export</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <p>SIMPRO v1.0 © 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
