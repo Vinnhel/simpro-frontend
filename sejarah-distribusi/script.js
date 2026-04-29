@@ -150,11 +150,7 @@ function renderPagination() {
 
 // ══ Modal Edit ══
 function openModal(i) {
-  editIndex = i;
-  document.getElementById("editPelanggan").value = allData[i].pelanggan;
-  document.getElementById("editJumlah").value    = allData[i].jumlah;
-  document.getElementById("editStatus").value    = allData[i].status;
-  document.getElementById("modalOverlay").classList.add("show");
+  window.location.href = '../distribusi/edit/edit.html?id=' + i;
 }
 
 function closeModal() {
