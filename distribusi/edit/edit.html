@@ -107,36 +107,49 @@
 
         <div class="grid md:grid-cols-2 items-center gap-3">
           <label for="produk" class="norm">Produk</label>
-          <select id="produk" class="field-input" required onchange="handleProdukChange()">
+          <select id="produk" class="field-input" required>
             <option value="" disabled selected>Pilihan Produk</option>
             <option value="tahu_bulat_cimol">Tahu Bulat Cimol</option>
             <option value="tahu_bulat_standar">Tahu Bulat Standar</option>
             <option value="tahu_bulat_jumbo">Tahu Bulat Jumbo</option>
             <option value="sotong">Sotong</option>
           </select>
+
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
           <label for="tgl_produksi" class="norm">Tanggal Produksi</label>
-          <select id="tgl_produksi" class="field-input" required onchange="handleTanggalChange()">
+          <select id="tgl_produksi" class="field-input" required>
             <option value="" disabled selected>Pilihan Tanggal Produksi</option>
           </select>
+
         </div>
 
+        <!-- TANGGAL KADALUARSA -->
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label for="kadaluarsa" class="req">Tanggal Kadaluarsa</label>
-          <input id="kadaluarsa" class="field-input field-readonly" readonly />
+          <label class="req">Perkiraan Tanggal Kadaluarsa</label>
+          <input 
+            id="kadaluarsa"
+            class="field-input field-readonly"
+            placeholder="DD/MM/YY (dihitung otomatis)"
+            readonly
+          />
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
           <label for="jumlah" class="norm">Jumlah Dikirim</label>
-          <input id="jumlah" class="field-input" type="number" min="1"
-                 oninput="hitungTotal()"/>
+          <input id="jumlah" class="field-input" type="number" min="1"/>
+
         </div>
 
-        <div class="grid md:grid-cols-2 items-center gap-3">
-          <label for="total" class="req">Total Harga</label>
-          <input id="total" class="field-input field-readonly" readonly/>
+       <div class="grid md:grid-cols-2 items-center gap-3">
+          <label class="req">Perkiraan Harga Total Produksi</label>
+          <input 
+            id="total"
+            class="field-input field-readonly"
+            placeholder="RpXXX.XXX (dihitung otomatis)"
+            readonly
+          />
         </div>
 
       </div>

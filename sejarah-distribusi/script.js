@@ -1,35 +1,50 @@
-// ══ Data distribusi ══
-var allData = [];
+if (!localStorage.getItem("distribusiData")) {
+  var seed = [];
+  var pelList    = ["Warung Bu Sari","Toko Maju","RM Sederhana",
+                    "Kantin Sekolah","Warung Pak Budi","Restoran Nusantara"];
+  var stsList    = ["Dikirim","Selesai","Pending","Dibatalkan"];
+  var produkList = ["tahu_bulat_cimol","tahu_bulat_standar",
+                    "tahu_bulat_jumbo","sotong"];
+  var hargaMap   = {
+    tahu_bulat_cimol:   7000,
+    tahu_bulat_standar: 15000,
+    tahu_bulat_jumbo:   10200,
+    sotong:             1700
+  };
+  var lokasiList = ["Jl. Merdeka No.1","Jl. Sudirman No.5",
+                    "Jl. Ahmad Yani No.3","Jl. Diponegoro No.7",
+                    "Jl. Gatot Subroto No.2","Jl. Veteran No.9"];
 
-var pelangganList = [
-  "Warung Bu Sari",
-  "Toko Maju",
-  "RM Sederhana",
-  "Kantin Sekolah",
-  "Warung Pak Budi",
-  "Restoran Nusantara"
-];
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function padDate(d) {
+    return pad(d.getDate()) + "/" + pad(d.getMonth()+1) + "/" + String(d.getFullYear()).slice(2);
+  }
 
-var statusList = ["Dikirim", "Selesai", "Pending", "Dibatalkan"];
-
-function pad(n) { return n < 10 ? "0" + n : "" + n; }
-
-function padDate(d) {
-  return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + "/" + String(d.getFullYear()).slice(2);
+  for (var i = 0; i < 25; i++) {
+    var d       = new Date(2026, 3, 27 - i);
+    var dp      = new Date(2026, 3, 25 - i);
+    var produk  = produkList[i % produkList.length];
+    var jumlah  = 50 + (i * 13 % 200);
+    seed.push({
+      tglDistribusi:  padDate(d),
+      pelanggan:      pelList[i % pelList.length],
+      tglProduksi:    padDate(dp),
+      jumlah:         jumlah,
+      status:         stsList[i % stsList.length],
+      produk:         produk,
+      total:          jumlah * hargaMap[produk], // angka, bukan string
+      telp_pelanggan: "0812" + String(i).padStart(7, "0"),
+      no_kendaraan:   ["B 1234 ABC","D 5678 DEF","E 9012 GHI"][i % 3],
+      telp_kondektur: "0813" + String(i).padStart(7, "0"),
+      lokasi:         lokasiList[i % lokasiList.length],
+      kadaluarsa:     padDate(new Date(2026, 3, 29 - i))
+    });
+  }
+  localStorage.setItem("distribusiData", JSON.stringify(seed));
 }
 
-// Generate 25 sample data
-for (var i = 0; i < 25; i++) {
-  var d  = new Date(2026, 3, 27 - i);
-  var dp = new Date(2026, 3, 25 - i);
-  allData.push({
-    tglDistribusi: padDate(d),
-    pelanggan:     pelangganList[i % pelangganList.length],
-    tglProduksi:   padDate(dp),
-    jumlah:        50 + (i * 13 % 200),
-    status:        statusList[i % statusList.length]
-  });
-}
+// Baru ambil dari localStorage
+var allData = JSON.parse(localStorage.getItem("distribusiData"));
 
 // ══ Pagination ══
 var perPage     = 15;
@@ -85,6 +100,7 @@ function optionsHtml(selected) {
 
 function updateStatus(i, val) {
   allData[i].status = val;
+  localStorage.setItem("distribusiData", JSON.stringify(allData));
 }
 
 // ══ Render pagination ══
@@ -194,12 +210,22 @@ function simpanBuat() {
   }
 
   allData.unshift({
-    tglDistribusi: fmtDate(tgl),
-    pelanggan:     pel,
-    tglProduksi:   fmtDate(tglp),
-    jumlah:        jml,
-    status:        sts
+    tglDistribusi:  fmtDate(tgl),
+    pelanggan:      pel,
+    tglProduksi:    fmtDate(tglp),
+    jumlah:         jml,
+    status:         sts,
+    telp_pelanggan: "",
+    no_kendaraan:   "",
+    telp_kondektur: "",
+    lokasi:         "",
+    produk:         "",
+    kadaluarsa:     "",
+    total:          ""
   });
+
+  // ← tambahkan ini
+  localStorage.setItem("distribusiData", JSON.stringify(allData));
 
   closeBuat();
   currentPage = 1;
