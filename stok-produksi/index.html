@@ -6,30 +6,39 @@
   <title>SIMPRO – Daftar Stok Produksi</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="navbar">
   <div class="nav-logo">
-  <img src="pict/logo-simpro-stokproduksi.png" alt="SIMPRO" onerror="this.style.display='none'"/> 
-  SIMPRO
-</div>
-  <ul class="nav-links">
-  <li><a href="../dashboard/index.html">Beranda</a></li>
-  <li><a href="../produksi/index.html">Produksi</a></li>
-  <li><a href="../sejarah-distribusi/index.html">Distribusi</a></li>
-  <li><a href="../keuntungan/index.html">Laporan Keuntungan</a></li>
+    <img src="pict/logo-simpro-stokproduksi.png" alt="SIMPRO" height="32"/>
+    <span>SIMPRO</span>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../dashboard/index.html">Beranda</a></li>
+    <li><a href="../produksi/index.html">Produksi</a></li>
+    <li><a href="#" class="nav-active">Distribusi</a></li>
+    <li><a href="../keuntungan/index.html">Laporan Keuntungan</a></li>
   </ul>
-  <div class="nav-right">
-    <button type="button" class="btn-icon" aria-label="Profil">
-      <svg width="28" height="28" fill="none" stroke="#8b3a3a" stroke-width="1.5" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-        <circle cx="12" cy="8" r="3"/>
-        <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+
+  <div class="nav-right" id="navRight">
+    <button class="btn-icon" aria-label="Profil">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <circle cx="19" cy="19" r="18" stroke="#A64B4B" stroke-width="1.5" fill="#f2e8e8"/>
+        <circle cx="19" cy="15" r="5" stroke="#A64B4B" stroke-width="1.5" fill="none"/>
+        <path d="M8 32c0-6 5-10 11-10s11 4 11 10" stroke="#A64B4B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
       </svg>
     </button>
-    <button type="button" class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
+    <button class="btn-keluar" onclick="window.location.href='../login/index.html'">Keluar</button>
   </div>
 </nav>
 

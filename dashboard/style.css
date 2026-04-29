@@ -6,7 +6,7 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
 }
 
@@ -16,13 +16,160 @@ body {
   margin: auto;
 }
 
-/* NAVBAR */
-.navbar {
+/* ══ NAVBAR ══ */
+nav {
+  background: #f2e8e8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 58px;
   position: sticky;
   top: 0;
-  background: #F9F5F2; /* ✅ samakan dengan hero */
-  padding: 18px 0;     /* sedikit lebih tinggi */
-  z-index: 1000;
+  z-index: 200;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: .88rem;
+  color: #666666;
+  font-weight: 400;
+  transition: color .2s;
+}
+.nav-links a:hover { color: #A95454; }
+.nav-links a.nav-active {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: opacity .2s;
+}
+.btn-icon:hover { opacity: .6; }
+
+.btn-keluar {
+  background: #A95454;
+  color: white;
+  border: none;
+  padding: 7px 22px;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s, transform .12s;
+}
+.btn-keluar:hover { background: #c97070; transform: translateY(-1px); }
+.btn-keluar:active { transform: translateY(0); }
+
+/* ── Hamburger ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  transition: transform .3s, opacity .3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile drawer ── */
+.nav-drawer {
+  display: none;
+  position: fixed;
+  top: 58px;
+  left: 0;
+  right: 0;
+  background: #f2e8e8;
+  padding: 16px 24px 24px;
+  z-index: 199;
+  border-bottom: 1px solid #f0d8d8;
+  flex-direction: column;
+}
+.nav-drawer.open {
+  display: flex;
+}
+.nav-drawer a {
+  text-decoration: none;
+  font-size: .95rem;
+  color: #666666;
+  font-weight: 500;
+  padding: 11px 0;
+  border-bottom: 1px solid #f0d8d8;
+  transition: color .2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-drawer a:last-of-type { border-bottom: none; }
+.nav-drawer a:hover { color: #A95454; }
+.nav-drawer a.nav-active { color: #1a1a1a; font-weight: 700; }
+.drawer-bottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  nav {
+    padding: 0 20px;
+  }
+  .nav-links,
+  .nav-right {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
 }
 
 /* CONTAINER */
@@ -54,69 +201,7 @@ body {
   color: #1f1f1f; /* lebih gelap biar nggak pucet */
 }
 
-/* MENU */
-.nav-menu {
-  display: flex;
-  gap: 32px;
-}
 
-.nav-menu a {
-  text-decoration: none;
-  font-size: 14px;
-  color: #2d2d2d; 
-  font-weight: 500;
-  transition: 0.3s;
-}
-
-.nav-menu a:hover {
-  color: #A64B4B;
-}
-
-/* RIGHT */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-/* PROFILE */
-.profile {
-  width: 36px;
-  height: 36px;
-  border: 2px solid #A64B4B;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* BUTTON */
-.btn-logout {
-  background: #A64B4B;
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.btn-logout:hover {
-  background: #8c3e3e;
-  transform: scale(1.05);
-}
-
-/* RESPONSIVE NAVBAR */
-@media (max-width: 768px) {
-  .nav-menu {
-    display: none;
-  }
-
-  .brand {
-    display: none;
-  }
-}
 
 /* HERO */
 .hero-content {

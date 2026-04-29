@@ -272,7 +272,7 @@ function setupMobileNav() {
           <path d="M8 32c0-6 5-10 11-10s11 4 11 10" stroke="#A64B4B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
 </svg>
         </button>
-        <button class="btn-keluar">Keluar</button>
+        <button class="btn-keluar" onclick="window.location.href='../login/index.html'">Keluar</button>
       </div>
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);

@@ -10,47 +10,42 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
 
   <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
 </head>
 
 <body class="min-h-screen">
 
   <!-- NAVBAR -->
-  <nav class="sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
+<nav id="navbar">
+  <div class="nav-logo">
+    <img src="img/logo-simpro.png" alt="SIMPRO" class="logo-img" />
+    <span>SIMPRO</span>
+  </div>
 
-      <!-- LOGO -->
-      <div class="flex items-center gap-2">
-        <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-          <circle cx="16" cy="16" r="16" fill="#A35D5D"/>
-          <path d="M9 22 L16 10 L23 22" stroke="#fff" stroke-width="2.2"/>
-        </svg>
-        <span class="font-display text-xl logo-text">SIMPRO</span>
-      </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 
-      <!-- MENU -->
-      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-gray-600">
-        <a href="../dashboard/index.html" class="nav-link">Beranda</a>
-        <a href="../produksi/index.html" class="nav-link">Produksi</a>
-        <a href="../distribusi/index.html" class="nav-link">Distribusi</a>
-        <a href="#" class="nav-link">Laporan Keuntungan</a>
-      </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="../../dashboard/index.html">Beranda</a></li>
+    <li><a href="../../produksi/index.html">Produksi</a></li>
+    <li><a href="../../stok-produksi/index.html" class="nav-active">Distribusi</a></li>
+    <li><a href="../../keuntungan/index.html">Laporan Keuntungan</a></li>
+  </ul>
 
-      <!-- RIGHT -->
-      <div class="flex items-center gap-3">
-        <button class="icon-btn">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-          </svg>
-        </button>
-
-        <!-- ✅ FIX LOGOUT -->
-        <button onclick="logout()" class="btn-marun text-sm px-4 py-2">
-          Keluar
-        </button>
-      </div>
-    </div>
-  </nav>
+  <div class="nav-right" id="navRight">
+    <button class="btn-icon" aria-label="Profil">
+      <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+        <circle cx="19" cy="19" r="18" stroke="#A64B4B" stroke-width="1.5" fill="#f2e8e8"/>
+        <circle cx="19" cy="15" r="5" stroke="#A64B4B" stroke-width="1.5" fill="none"/>
+        <path d="M8 32c0-6 5-10 11-10s11 4 11 10" stroke="#A64B4B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </button>
+    <button class="btn-keluar" onclick="window.location.href='../../login/index.html'">Keluar</button>
+  </div>
+</nav>
 
   <!-- HERO -->
   <div class="hero-header py-10 text-center">
@@ -58,9 +53,9 @@
       Edit Distribusi
     </h1>
 
-    <button onclick="window.location.href='../dashboard/index.html'" class="btn-marun">
-      Kembali
-    </button>
+    <button onclick="window.location.href='../../sejarah-distribusi/index.html'" class="btn-marun">
+  Kembali
+</button>
   </div>
 
   <!-- MAIN -->
@@ -75,27 +70,27 @@
       <div class="grid gap-5">
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Nama Pelanggan</label>
+          <label for="nama" class="norm">Nama Pelanggan</label>
           <input id="nama" required class="field-input" type="text"/>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Nomor Telepon Pelanggan</label>
+          <label for="telp_pelanggan" class="req">Nomor Telepon Pelanggan</label>
           <input id="telp_pelanggan" required class="field-input" type="tel"/>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Nomor Kendaraan</label>
+          <label for="no_kendaraan" class="norm">Nomor Kendaraan</label>
           <input id="no_kendaraan" class="field-input" type="text"/>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Nomor Telepon Kondektur</label>
+          <label for="telp_kondektur" class="req">Nomor Telepon Kondektur</label>
           <input id="telp_kondektur" required class="field-input" type="tel"/>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Lokasi Pengiriman</label>
+          <label for="lokasi" class="norm">Lokasi Pengiriman</label>
           <input id="lokasi" class="field-input" type="text"/>
         </div>
 
@@ -111,7 +106,7 @@
       <div class="grid gap-5">
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Produk</label>
+          <label for="produk" class="norm">Produk</label>
           <select id="produk" class="field-input" required onchange="handleProdukChange()">
             <option value="" disabled selected>Pilihan Produk</option>
             <option value="tahu_bulat_cimol">Tahu Bulat Cimol</option>
@@ -122,25 +117,25 @@
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Tanggal Produksi</label>
+          <label for="tgl_produksi" class="norm">Tanggal Produksi</label>
           <select id="tgl_produksi" class="field-input" required onchange="handleTanggalChange()">
             <option value="" disabled selected>Pilihan Tanggal Produksi</option>
           </select>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Tanggal Kadaluarsa</label>
+          <label for="kadaluarsa" class="req">Tanggal Kadaluarsa</label>
           <input id="kadaluarsa" class="field-input field-readonly" readonly />
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="norm">Jumlah Dikirim</label>
+          <label for="jumlah" class="norm">Jumlah Dikirim</label>
           <input id="jumlah" class="field-input" type="number" min="1"
                  oninput="hitungTotal()"/>
         </div>
 
         <div class="grid md:grid-cols-2 items-center gap-3">
-          <label class="req">Total Harga</label>
+          <label for="total" class="req">Total Harga</label>
           <input id="total" class="field-input field-readonly" readonly/>
         </div>
 
