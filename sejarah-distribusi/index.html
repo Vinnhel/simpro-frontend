@@ -22,14 +22,14 @@
     <li><a href="#">Laporan Keuntungan</a></li>
   </ul>
   <div class="nav-right">
-    <button class="btn-icon">
+    <button type="button" class="btn-icon" aria-label="Profil pengguna">
       <svg width="28" height="28" fill="none" stroke="#8b3a3a" stroke-width="1.5" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10"/>
         <circle cx="12" cy="8" r="3"/>
         <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
       </svg>
     </button>
-    <button class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
+    <button type="button" class="btn-keluar" onclick="alert('Anda telah keluar.')">Keluar</button>
   </div>
 </nav>
 
@@ -70,11 +70,11 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h3>Edit Distribusi</h3>
-    <label>Pelanggan</label>
+    <label for="editPelanggan">Pelanggan</label>
     <input type="text" id="editPelanggan"/>
-    <label>Jumlah</label>
-    <input type="number" id="editJumlah" min="0"/>
-    <label>Status</label>
+    <label for="editJumlah">Jumlah</label>
+    <input type="number" id="editJumlah" min="0" placeholder="0"/>
+    <label for="editStatus">Status</label>
     <select id="editStatus">
       <option value="Dikirim">Dikirim</option>
       <option value="Selesai">Selesai</option>
@@ -92,15 +92,15 @@
 <div class="modal-overlay" id="modalBuat">
   <div class="modal">
     <h3>Buat Distribusi Baru</h3>
-    <label>Tanggal Distribusi</label>
+    <label for="buatTanggal">Tanggal Distribusi</label>
     <input type="date" id="buatTanggal"/>
-    <label>Pelanggan</label>
+    <label for="buatPelanggan">Pelanggan</label>
     <input type="text" id="buatPelanggan" placeholder="Nama pelanggan"/>
-    <label>Tanggal Produksi</label>
+    <label for="buatTanggalProd">Tanggal Produksi</label>
     <input type="date" id="buatTanggalProd"/>
-    <label>Jumlah</label>
+    <label for="buatJumlah">Jumlah</label>
     <input type="number" id="buatJumlah" min="0" placeholder="0"/>
-    <label>Status</label>
+    <label for="buatStatus">Status</label>
     <select id="buatStatus">
       <option value="Pending">Pending</option>
       <option value="Dikirim">Dikirim</option>
