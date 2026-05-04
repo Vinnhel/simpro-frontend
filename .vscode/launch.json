@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open SIMPRO",
+            "file": "c:\\Users\\ASUS\\OneDrive\\Dokumen\\SIMPRO CODE\\login\\index.html"
+        }
+    ]
+}

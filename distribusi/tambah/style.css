@@ -10,12 +10,10 @@
 body {
   margin: 0;
   font-family: 'DM Sans', sans-serif;
-  background: #f3f4f6; /* lebih abu sesuai design */
+  background: #ffffff; /* lebih abu sesuai design */
 }
 
-.font-display {
-  font-family: 'Playfair Display', serif;
-}
+
 
 /* ══ NAVBAR ══ */
 nav {
@@ -181,7 +179,8 @@ nav {
 
 .hero-title {
   color: #4b3b3b;
-  font-size: 48px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
   font-weight: 700;
 }
 
@@ -195,7 +194,8 @@ nav {
 
 .section-title {
   color: #4b3b3b;
-  font-size: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 32px;
 }

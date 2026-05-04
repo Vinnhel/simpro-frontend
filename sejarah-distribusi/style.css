@@ -418,3 +418,40 @@ footer {
 }
 
 .toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── Select Status Distribusi ───────────────────────────────── */
+.status-select {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: auto;
+}
+
+/* Belum Dikirim */
+.status-belum {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+/* Sedang Dikirim */
+.status-dikirim {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+/* Sudah Terkirim */
+.status-terkirim {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* ── Info stok di form distribusi ───────────────────────────── */
+#stok-info {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 4px;
+  font-style: italic;
+}

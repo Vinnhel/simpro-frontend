@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <script src="../shared.js"></script>
 </head>
 <body>
 
@@ -85,9 +86,9 @@
     <input type="number" id="editJumlah" min="0" placeholder="0"/>
     <label for="editStatus">Status</label>
     <select id="editStatus">
-      <option value="Dikirim">Dikirim</option>
-      <option value="Selesai">Selesai</option>
-      <option value="Pending">Pending</option>
+      <option value="Belum Dikirim">Belum Dikirim</option>
+      <option value="Sedang Dikirim">Sedang Dikirim</option>
+      <option value="Sudah Terkirim">Sudah Terkirim</option>
       <option value="Dibatalkan">Dibatalkan</option>
     </select>
     <div class="modal-btns">
@@ -111,9 +112,9 @@
     <input type="number" id="buatJumlah" min="0" placeholder="0"/>
     <label for="buatStatus">Status</label>
     <select id="buatStatus">
-      <option value="Pending">Pending</option>
-      <option value="Dikirim">Dikirim</option>
-      <option value="Selesai">Selesai</option>
+      <option value="Belum Dikirim">Belum Dikirim</option>
+      <option value="Sedang Dikirim">Sedang Dikirim</option>
+      <option value="Sudah Terkirim">Sudah Terkirim</option>
     </select>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeBuat()">Batal</button>

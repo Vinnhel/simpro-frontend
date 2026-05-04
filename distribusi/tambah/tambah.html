@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tambah Distribusi – SIMPRO</title>
 
+  <script src="../../shared.js"></script>
+  <script>
+    // Seragamkan font Tailwind dengan halaman lain (DM Sans + Playfair Display)
+    window.tailwind = { config: {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans   : ["'DM Sans'", 'sans-serif'],
+            display: ["'Playfair Display'", 'serif'],
+          }
+        }
+      }
+    }};
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
@@ -49,7 +63,7 @@
 
   <!-- HERO -->
   <div class="hero-header py-10 text-center">
-    <h1 class="font-display text-4xl mb-5 hero-title">
+    <h1 class="text-4xl mb-5 hero-title">
       Tambah Distribusi
     </h1>
 
@@ -63,7 +77,7 @@
 
     <!-- DATA PELANGGAN -->
     <div class="section-card">
-      <h2 class="font-display text-2xl mb-6 section-title">
+      <h2 class="text-2xl mb-6 section-title">
         Data Pelanggan
       </h2>
 
@@ -99,7 +113,7 @@
 
     <!-- PRODUK -->
     <div class="section-card">
-      <h2 class="font-display text-2xl mb-6 section-title">
+      <h2 class="text-2xl mb-6 section-title">
         Produk & Stok
       </h2>
 
@@ -121,6 +135,7 @@
           <select id="tgl_produksi" class="field-input" title="Pilih tanggal produksi" onchange="handleTanggalChange()">
             <option value="" disabled selected>Pilihan Tanggal Produksi</option>
           </select>
+          <p id="stok-info"></p>
         </div>
 
         <!-- TANGGAL KADALUARSA -->

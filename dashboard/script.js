@@ -1,3 +1,12 @@
+// ══ Guard login ══
+// Dashboard harus dilindungi — jika belum login, redirect ke login
+window.addEventListener('DOMContentLoaded', function() {
+  if (localStorage.getItem('isLogin') !== 'true') {
+    window.location.href = '../login/index.html';
+    return;
+  }
+});
+
 // Smooth Scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener("click", function(e) {
@@ -9,23 +18,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Scroll Reveal
 const elements = document.querySelectorAll("section, .card");
-
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("show");
-    }
+    if (entry.isIntersecting) entry.target.classList.add("show");
   });
 });
-
-elements.forEach(el => {
-  el.classList.add("fade");
-  observer.observe(el);
-});
+elements.forEach(el => { el.classList.add("fade"); observer.observe(el); });
 
 function logout() {
   localStorage.removeItem("isLogin");
-
   window.location.href = "../login/index.html";
 }
 
@@ -51,7 +52,7 @@ function setupMobileNav() {
             <path d="M8 32c0-6 5-10 11-10s11 4 11 10" stroke="#A64B4B" stroke-width="1.5" stroke-linecap="round" fill="none"/>
           </svg>
         </button>
-        <button class="btn-keluar" onclick="window.location.href='../login/index.html'">Keluar</button>
+        <button class="btn-keluar" onclick="logout()">Keluar</button>
       </div>
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
@@ -59,11 +60,7 @@ function setupMobileNav() {
 
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
-    if (isOpen) {
-      drawer.classList.add('open');
-    } else {
-      drawer.classList.remove('open');
-    }
+    drawer.classList.toggle('open', isOpen);
   });
 }
 
