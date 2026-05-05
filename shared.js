@@ -308,9 +308,25 @@ function simpro_tambahDistribusi(data) {
  */
 function simpro_updateDistribusi(index, perubahan) {
   var list = simpro_ambilSemuaDistribusi();
-  if (!list[index]) return;
+  if (!list[index]) return { error: 'Data tidak ditemukan' };
 
   var lama = JSON.parse(JSON.stringify(list[index]));
+
+  // Validasi stok jika jumlah bertambah
+  if (perubahan.jumlah !== undefined) {
+    var jumlahBaru  = parseInt(perubahan.jumlah, 10);
+    var jumlahLama  = parseInt(lama.jumlah, 10);
+    var produkKey   = perubahan.produk || lama.produk;
+    var selisihCek  = jumlahBaru - jumlahLama;
+
+    if (selisihCek > 0) {
+      var stokTersedia = simpro_totalStokProduk(produkKey);
+      if (selisihCek > stokTersedia) {
+        var maxBisa = jumlahLama + stokTersedia;
+        return { error: 'Stok tidak mencukupi. Stok tersedia: ' + stokTersedia + ' pcs. Maksimal jumlah yang bisa diinput: ' + maxBisa + ' pcs.' };
+      }
+    }
+  }
 
   // Terapkan perubahan
   Object.keys(perubahan).forEach(function(k) {
@@ -332,6 +348,8 @@ function simpro_updateDistribusi(index, perubahan) {
     if (selisih > 0) simpro_kurangiStok(lama.produk, selisih);
     if (selisih < 0) simpro_kembalikanStok(lama.produk, Math.abs(selisih));
   }
+
+  return { success: true };
 }
 
 /**

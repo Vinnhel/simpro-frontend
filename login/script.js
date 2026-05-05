@@ -68,7 +68,7 @@ window.addEventListener('resize', function() { pill(cur); });
 // ══ LOGIN ══
 function handleLogin() {
   var username = document.querySelector("#formMasuk input[type='text']").value.trim();
-  var password = document.querySelector("#formMasuk input[type='password']").value;
+  var password = document.getElementById('passLogin').value;
   var ingatSaya = document.querySelector("#formMasuk input[type='checkbox']").checked;
 
   var storedUser = JSON.parse(localStorage.getItem('user'));
@@ -99,7 +99,7 @@ function handleLogin() {
 function handleRegister() {
   var username = document.querySelector("#formDaftar input[type='text']").value.trim();
   var email    = document.querySelector("#formDaftar input[type='email']").value.trim();
-  var password = document.querySelector("#formDaftar input[type='password']").value;
+  var password = document.getElementById('passRegister').value;
 
   if (!username || !email || !password) {
     alert('Semua field harus diisi!');

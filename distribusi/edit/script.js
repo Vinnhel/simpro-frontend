@@ -131,7 +131,14 @@ function handleProdukChange() {
 // ── HITUNG TOTAL ─────────────────────────────────────
 function hitungTotal() {
   var produk = document.getElementById('produk').value;
-  var jumlah = parseInt(document.getElementById('jumlah').value) || 0;
+  var jumlahEl = document.getElementById('jumlah');
+  var jumlah = parseInt(jumlahEl.value) || 0;
+
+  // Paksa nilai minimum 1 jika user ketik 0 atau minus
+  if (jumlahEl.value !== '' && jumlah < 1) {
+    jumlahEl.value = 1;
+    jumlah = 1;
+  }
 
   // ← Pakai SIMPRO_PRODUK bukan produkData lokal
   var info  = SIMPRO_PRODUK[produk];
@@ -206,6 +213,11 @@ function simpanData() {
 
   var produk    = document.getElementById('produk').value;
   var jumlah    = parseInt(document.getElementById('jumlah').value) || 0;
+
+  if (jumlah < 1) {
+    showToast('⚠️ Jumlah harus minimal 1!');
+    return;
+  }
   var info      = SIMPRO_PRODUK[produk];
   var harga     = info ? info.harga : 0;
   var totalStr  = document.getElementById('total').value;
@@ -215,7 +227,7 @@ function simpanData() {
   var tglProdDMY = toDMY(tglProdISO);
 
   // Update via shared.js → tangani selisih stok otomatis
-  simpro_updateDistribusi(currentId, {
+  var hasil = simpro_updateDistribusi(currentId, {
     pelanggan     : document.getElementById('nama').value,
     telp_pelanggan: document.getElementById('telp_pelanggan').value,
     no_kendaraan  : document.getElementById('no_kendaraan').value,
@@ -227,6 +239,12 @@ function simpanData() {
     tglProduksi   : tglProdDMY,
     kadaluarsa    : document.getElementById('kadaluarsa').value
   });
+
+  // Jika ada error (misal stok tidak cukup), tampilkan pesan dan batalkan
+  if (hasil && hasil.error) {
+    showToast('⚠️ ' + hasil.error);
+    return;
+  }
 
   // Sync variabel lokal agar konsisten
   distribusiData = JSON.parse(localStorage.getItem('distribusiData')) || [];

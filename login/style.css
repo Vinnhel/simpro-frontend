@@ -172,7 +172,7 @@ html, body {
   color: var(--label-color);
   margin-bottom: 7px;
 }
-.input-wrap { position: relative; }
+.input-wrap { position: relative; z-index: 0; isolation: isolate; }
 .input-wrap input {
   width: 100%;
   padding: 12px 44px 12px 20px;
@@ -198,6 +198,7 @@ html, body {
   background: none; border: none; cursor: pointer;
   color: #C4A0A0; display: flex; align-items: center;
   transition: color 0.2s; padding: 0;
+  z-index: 2;
 }
 .eye-btn:hover { color: #8B3030; }
 

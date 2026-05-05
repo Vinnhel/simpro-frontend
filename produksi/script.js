@@ -190,14 +190,13 @@ function setupMobileNav() {
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
 
-  hamburger.addEventListener('click', () => {
-    const isOpen = hamburger.classList.toggle('open');
-    if (isOpen) {
-      drawer.classList.add('open');
-    } else {
-      drawer.classList.remove('open');
-    }
-  });
+  // Guard: pasang listener hanya sekali
+  if (!hamburger.dataset.listenerSet) {
+    hamburger.dataset.listenerSet = 'true';
+    hamburger.addEventListener('click', () => {
+      const isOpen = hamburger.classList.toggle('open');
+      drawer.classList.toggle('open', isOpen);
+    });
+  }
 }
 
-document.addEventListener('DOMContentLoaded', setupMobileNav);
