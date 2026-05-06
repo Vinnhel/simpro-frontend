@@ -1,18 +1,12 @@
 /* ══════════════════════════════════════════════════════════════
-   SIMPRO – stok-produksi/script.js  (terintegrasi)
-   Perubahan dari versi lama:
-   - var stokData = [...] dummy dihapus
-   - Data dibaca dari localStorage "stokData" via simpro_ambilSemuaStok()
-   - saveEdit() menyimpan kembali ke localStorage via simpro_editStok()
-   - Guard login via simpro_requireLogin()
+   SIMPRO – stok-produksi/script.js  (API version)
    ══════════════════════════════════════════════════════════════ */
 
-var editIndex = -1;
+var editId = null; // simpan ID database, bukan index
 
 // ══ Render tabel ══
-function renderTable() {
-  // ← INI YANG BERUBAH: dulu pakai var stokData dummy
-  var stokData = simpro_ambilSemuaStok();
+async function renderTable() {
+  var stokData = await simpro_ambilSemuaStok();
 
   var tbody = document.getElementById('stokTableBody');
   tbody.innerHTML = '';
@@ -26,15 +20,22 @@ function renderTable() {
     return;
   }
 
-  stokData.forEach(function(row, i) {
+  stokData.forEach(function(row) {
     var tr = document.createElement('tr');
+    // Format tanggal dari ISO ke DD/MM/YY untuk tampilan
+    var tglTampil = '-';
+    if (row.tanggal) {
+      var tglBersih = row.tanggal.split('T')[0]; // ambil YYYY-MM-DD saja
+      tglTampil = simpro_isoToDMY(tglBersih);
+}
+
     tr.innerHTML =
-      '<td>' + row.tanggal + '</td>' +
-      '<td>' + row.produk  + '</td>' +
-      '<td>' + row.stok    + '</td>' +
-      '<td>' + row.jumlah  + '</td>' +
+      '<td>' + tglTampil + '</td>' +
+      '<td>' + (row.produk_nama || row.produk || '-') + '</td>' +
+      '<td>' + (row.status     || row.stok  || '-') + '</td>' +
+      '<td>' + row.jumlah + '</td>' +
       '<td>' +
-        "<button class='edit-btn' onclick='openModal(" + i + ")' title='Edit'>" +
+        "<button class='edit-btn' onclick='openModal(" + row.id + ")' title='Edit'>" +
           "<svg width='16' height='16' fill='none' stroke='currentColor' stroke-width='1.8' viewBox='0 0 24 24'>" +
             "<path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/>" +
             "<path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/>" +
@@ -53,12 +54,9 @@ function updateRingkasan(stokData) {
   var sotongTotal = 0;
 
   stokData.forEach(function(r) {
-    if (r.produk.toLowerCase().indexOf('tahu') !== -1) {
-      tahuTotal += r.jumlah;
-    }
-    if (r.produk.toLowerCase().indexOf('sotong') !== -1) {
-      sotongTotal += r.jumlah;
-    }
+    var namaProduk = (r.produk_nama || r.produk || '').toLowerCase();
+    if (namaProduk.indexOf('tahu') !== -1)   tahuTotal   += r.jumlah;
+    if (namaProduk.indexOf('sotong') !== -1) sotongTotal += r.jumlah;
   });
 
   document.getElementById('ringTahu').textContent   = tahuTotal.toLocaleString('id-ID')   + ' pcs';
@@ -66,36 +64,45 @@ function updateRingkasan(stokData) {
 }
 
 // ══ Buka modal edit ══
-function openModal(i) {
-  editIndex = i;
-  var stokData = simpro_ambilSemuaStok();
-  document.getElementById('editNama').value   = stokData[i].produk;
-  document.getElementById('editStok').value   = stokData[i].stok;
-  document.getElementById('editJumlah').value = stokData[i].jumlah;
+async function openModal(id) {
+  editId = id;
+  var stokData = await simpro_ambilSemuaStok();
+  var row = stokData.find(function(s) { return s.id === id; });
+  if (!row) return;
+
+  document.getElementById('editNama').value   = row.produk_nama || row.produk || '';
+  document.getElementById('editStok').value   = row.status      || row.stok   || '';
+  document.getElementById('editJumlah').value = row.jumlah;
   document.getElementById('modalOverlay').classList.add('show');
 }
 
 // ══ Tutup modal ══
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
-  editIndex = -1;
+  editId = null;
 }
 
 // ══ Simpan hasil edit ══
-function saveEdit() {
-  if (editIndex < 0) return;
+async function saveEdit() {
+  if (editId === null) return;
 
   var jumlahBaru = parseInt(document.getElementById('editJumlah').value) || 0;
 
-  // ← INI YANG BERUBAH: dulu hanya update var stokData lokal
-  simpro_editStok(editIndex, jumlahBaru);
+  var btn = document.querySelector('#modalOverlay .btn-save');
+  if (btn) { btn.disabled = true; btn.textContent = 'Menyimpan...'; }
 
-  closeModal();
-  renderTable();
-  showToast('Stok berhasil diperbarui!');
+  try {
+    var hasil = await simpro_editStok(editId, jumlahBaru);
+    if (hasil && hasil.error) { showToast('Gagal: ' + hasil.error); return; }
+    closeModal();
+    await renderTable();
+    showToast('Stok berhasil diperbarui!');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Simpan'; }
+  }
 }
 
-// ══ Toast notifikasi ══
+// ══ Toast ══
 function showToast(msg) {
   var t = document.getElementById('toast');
   t.textContent = msg;
@@ -104,9 +111,9 @@ function showToast(msg) {
 }
 
 // ══ Init ══
-window.onload = function() {
+window.onload = async function() {
   simpro_requireLogin();
-  renderTable();
+  await renderTable();
   document.getElementById('modalOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
@@ -141,7 +148,6 @@ function setupMobileNav() {
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
 
-  // Guard: pasang listener hanya sekali
   if (!hamburger.dataset.listenerSet) {
     hamburger.dataset.listenerSet = 'true';
     hamburger.addEventListener('click', () => {
@@ -150,4 +156,3 @@ function setupMobileNav() {
     });
   }
 }
-

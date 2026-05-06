@@ -1,27 +1,19 @@
 /* ══════════════════════════════════════════════════════════════
-   SIMPRO – keuntungan/script.js  (terintegrasi)
-   Base: commit terbaru (struktur chart & UI lengkap)
-   Perubahan:
-   - RAW_DATA mock dihapus
-   - getFiltered() membaca dari simpro_rekapKeuntungan()
-     → hanya distribusi berstatus "Sudah Terkirim"
-   - renderKosong() ditampilkan jika belum ada data nyata
-   - Guard login via simpro_requireLogin()
+   SIMPRO – keuntungan/script.js  (API version)
    ══════════════════════════════════════════════════════════════ */
 
 'use strict';
 
-// ── INIT ────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function() {
   simpro_requireLogin();
 
   var periodSelect = document.getElementById('periodSelect');
   var btnExport    = document.getElementById('btnExport');
 
-  updateAll(periodSelect.value);
+  await updateAll(periodSelect.value);
 
-  periodSelect.addEventListener('change', function () {
-    updateAll(periodSelect.value);
+  periodSelect.addEventListener('change', async function() {
+    await updateAll(periodSelect.value);
   });
 
   if (btnExport) btnExport.addEventListener('click', exportCSV);
@@ -29,10 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
   setupMobileNav();
 });
 
-// ── FILTER PERIODE ───────────────────────────────────────────────
-// ← INI YANG BERUBAH: dulu pakai RAW_DATA mock, sekarang dari localStorage
-function getFiltered(period) {
-  var all = simpro_rekapKeuntungan(); // hanya status "Sudah Terkirim"
+// ── FILTER PERIODE ────────────────────────────────────────────────
+async function getFiltered(period) {
+  var all = await simpro_rekapKeuntungan();
   if (!all.length) return [];
   switch (period) {
     case 'bulan-ini': return all.slice(-1);
@@ -43,39 +34,25 @@ function getFiltered(period) {
   }
 }
 
-// ── UPDATE SEMUA KOMPONEN ────────────────────────────────────────
-function updateAll(period) {
-  var data = getFiltered(period);
-
-  if (data.length === 0) {
-    renderKosong();
-    return;
-  }
-
+// ── UPDATE SEMUA KOMPONEN ─────────────────────────────────────────
+async function updateAll(period) {
+  var data = await getFiltered(period);
+  if (data.length === 0) { renderKosong(); return; }
   renderChart(data);
   renderTable(data);
   renderRingkasan(data);
 }
 
-// ── STATE KOSONG ─────────────────────────────────────────────────
+// ── STATE KOSONG ──────────────────────────────────────────────────
 function renderKosong() {
   if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-
   var canvas = document.getElementById('keuntunganChart');
   var ctx    = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Tulis pesan di canvas
   ctx.save();
-  ctx.fillStyle    = '#bbb';
-  ctx.font         = '14px DM Sans, sans-serif';
-  ctx.textAlign    = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(
-    'Belum ada data distribusi berstatus "Sudah Terkirim"',
-    canvas.width / 2,
-    canvas.height / 2
-  );
+  ctx.fillStyle = '#bbb'; ctx.font = '14px DM Sans, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('Belum ada data distribusi berstatus "Sudah Terkirim"', canvas.width / 2, canvas.height / 2);
   ctx.restore();
 
   var tbody = document.getElementById('detailBody');
@@ -84,20 +61,17 @@ function renderKosong() {
       '<tr><td colspan="5" style="text-align:center;padding:32px;color:#aaa;font-style:italic;">' +
       'Data muncul setelah status distribusi diubah ke "Sudah Terkirim".</td></tr>';
   }
-
   ['sumKeuntungan','sumProduk','avgHari'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.textContent = id === 'sumProduk' ? '0 pcs' : 'Rp 0';
   });
 }
 
-// ── CHART ────────────────────────────────────────────────────────
+// ── CHART ─────────────────────────────────────────────────────────
 var chartInstance = null;
 
 function buildChartData(data) {
-  var labels = [];
-  var values = [];
-
+  var labels = [], values = [];
   data.forEach(function(row) {
     var pointsPerMonth = 4;
     for (var p = 0; p < pointsPerMonth; p++) {
@@ -108,22 +82,15 @@ function buildChartData(data) {
       labels.push(p === 0 ? row.label : '');
     }
   });
-
-  if (data.length) {
-    labels.push('');
-    values.push(data[data.length - 1].totalKeuntungan);
-  }
-
-  return { labels: labels, values: values };
+  if (data.length) { labels.push(''); values.push(data[data.length - 1].totalKeuntungan); }
+  return { labels, values };
 }
 
 function renderChart(data) {
   var ctx = document.getElementById('keuntunganChart').getContext('2d');
   if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-
   var chartData = buildChartData(data);
-
-  var gradient = ctx.createLinearGradient(0, 0, 0, 280);
+  var gradient  = ctx.createLinearGradient(0, 0, 0, 280);
   gradient.addColorStop(0,   'rgba(211, 47, 47, 0.85)');
   gradient.addColorStop(0.6, 'rgba(211, 47, 47, 0.55)');
   gradient.addColorStop(1,   'rgba(211, 47, 47, 0.05)');
@@ -131,54 +98,33 @@ function renderChart(data) {
   chartInstance = new Chart(ctx, {
     type: 'line',
     data: {
-      labels  : chartData.labels,
+      labels: chartData.labels,
       datasets: [{
-        data                    : chartData.values,
-        fill                    : true,
-        backgroundColor         : gradient,
-        borderColor             : '#D32F2F',
-        borderWidth             : 2.5,
-        tension                 : 0.42,
-        pointRadius             : 0,
-        pointHoverRadius        : 5,
-        pointHoverBackgroundColor: '#D32F2F',
-        pointHoverBorderColor   : '#fff',
-        pointHoverBorderWidth   : 2
+        data: chartData.values, fill: true, backgroundColor: gradient,
+        borderColor: '#D32F2F', borderWidth: 2.5, tension: 0.42,
+        pointRadius: 0, pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#D32F2F', pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2
       }]
     },
     options: {
-      responsive         : true,
-      maintainAspectRatio: false,
-      interaction        : { mode: 'index', intersect: false },
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend : { display: false },
+        legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(26,26,26,0.88)',
-          titleColor     : '#fff',
-          bodyColor      : 'rgba(255,255,255,0.75)',
-          padding        : 12,
-          cornerRadius   : 8,
-          displayColors  : false,
+          backgroundColor: 'rgba(26,26,26,0.88)', titleColor: '#fff',
+          bodyColor: 'rgba(255,255,255,0.75)', padding: 12, cornerRadius: 8, displayColors: false,
           callbacks: {
             title: function(items) { return items[0].label || ''; },
-            label: function(item)  {
-              return 'Keuntungan: Rp ' + Math.round(item.raw).toLocaleString('id-ID');
-            }
+            label: function(item)  { return 'Keuntungan: Rp ' + Math.round(item.raw).toLocaleString('id-ID'); }
           }
         }
       },
       scales: {
         x: {
-          grid  : { display: false },
-          border: { display: false },
-          ticks : {
-            color      : '#999',
-            font       : { family: 'DM Sans', size: 11 },
-            maxRotation: 0,
-            callback   : function(val) {
-              return this.getLabelForValue(val) || null;
-            }
-          }
+          grid: { display: false }, border: { display: false },
+          ticks: { color: '#999', font: { family: 'DM Sans', size: 11 }, maxRotation: 0,
+            callback: function(val) { return this.getLabelForValue(val) || null; } }
         },
         y: { display: false, beginAtZero: true }
       },
@@ -187,11 +133,10 @@ function renderChart(data) {
   });
 }
 
-// ── TABEL DETAIL ─────────────────────────────────────────────────
+// ── TABEL DETAIL ──────────────────────────────────────────────────
 function renderTable(data) {
   var tbody = document.getElementById('detailBody');
   if (!tbody) return;
-
   tbody.innerHTML = data.map(function(row) {
     return '<tr>' +
       '<td>' + row.label + '</td>' +
@@ -210,25 +155,15 @@ function renderRingkasan(data) {
   var totalDays       = data.reduce(function(s, r) { return s + r.days;            }, 0) || 1;
   var avgHari         = totalKeuntungan / totalDays;
 
-  animateValue('sumKeuntungan', totalKeuntungan, function(v) {
-    return 'Rp ' + Math.round(v).toLocaleString('id-ID');
-  });
-  animateValue('sumProduk', totalProduk, function(v) {
-    return Math.round(v).toLocaleString('id-ID') + ' pcs';
-  });
-  animateValue('avgHari', avgHari, function(v) {
-    return 'Rp ' + Math.round(v).toLocaleString('id-ID');
-  });
+  animateValue('sumKeuntungan', totalKeuntungan, function(v) { return 'Rp ' + Math.round(v).toLocaleString('id-ID'); });
+  animateValue('sumProduk',     totalProduk,     function(v) { return Math.round(v).toLocaleString('id-ID') + ' pcs'; });
+  animateValue('avgHari',       avgHari,         function(v) { return 'Rp ' + Math.round(v).toLocaleString('id-ID'); });
 }
 
-// ── ANIMASI ANGKA ─────────────────────────────────────────────────
 function animateValue(id, target, formatter) {
   var el = document.getElementById(id);
   if (!el) return;
-
-  var duration  = 600;
-  var startTime = performance.now();
-
+  var duration = 600, startTime = performance.now();
   function update(now) {
     var elapsed  = now - startTime;
     var progress = Math.min(elapsed / duration, 1);
@@ -240,14 +175,10 @@ function animateValue(id, target, formatter) {
 }
 
 // ── EXPORT CSV ────────────────────────────────────────────────────
-function exportCSV() {
+async function exportCSV() {
   var period = document.getElementById('periodSelect').value;
-  var data   = getFiltered(period);
-
-  if (!data.length) {
-    alert('Tidak ada data untuk diekspor.');
-    return;
-  }
+  var data   = await getFiltered(period);
+  if (!data.length) { alert('Tidak ada data untuk diekspor.'); return; }
 
   var header = 'Bulan,Tahu Bulat (pcs),Sotong (pcs),Total Terjual (pcs),Total Keuntungan (Rp)';
   var rows   = data.map(function(r) {
@@ -257,22 +188,18 @@ function exportCSV() {
   var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
-  a.href     = url;
-  a.download = 'laporan-keuntungan-' + period + '.csv';
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = 'laporan-keuntungan-' + period + '.csv';
+  a.click(); URL.revokeObjectURL(url);
 }
 
 // ── MOBILE NAV ────────────────────────────────────────────────────
 function setupMobileNav() {
   const hamburger = document.getElementById('hamburger');
   if (!hamburger) return;
-
   let drawer = document.getElementById('navDrawer');
   if (!drawer) {
     drawer = document.createElement('div');
-    drawer.id = 'navDrawer';
-    drawer.className = 'nav-drawer';
+    drawer.id = 'navDrawer'; drawer.className = 'nav-drawer';
     drawer.innerHTML = `
       <a href="../dashboard/index.html">Beranda</a>
       <a href="../produksi/index.html">Produksi</a>
@@ -291,17 +218,10 @@ function setupMobileNav() {
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
-
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
-    if (isOpen) {
-      drawer.classList.add('open');
-    } else {
-      drawer.classList.remove('open');
-    }
+    drawer.classList.toggle('open', isOpen);
   });
 }
 
-function logout() {
-  simpro_logout();
-}
+function logout() { simpro_logout(); }

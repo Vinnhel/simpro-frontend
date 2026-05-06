@@ -1,35 +1,26 @@
 /* ══════════════════════════════════════════════════════════════
-   SIMPRO – sejarah-distribusi/script.js  (terintegrasi)
-   Base: commit terbaru (sudah pakai localStorage "distribusiData")
-   Perubahan tambahan:
-   - Seed data dihapus → data nyata dari localStorage
-   - updateStatus() sekarang memperbarui via simpro_updateDistribusi()
-   - Tambah tombol hapus → memanggil simpro_hapusDistribusi()
-     + stok dikembalikan otomatis
-   - optionsHtml() disesuaikan dengan 3 status konsep:
-     Belum Dikirim / Sedang Dikirim / Sudah Terkirim
-   - simpanBuat() (modal cepat) → simpro_tambahDistribusi()
-   - Guard login via simpro_requireLogin()
+   SIMPRO – sejarah-distribusi/script.js  (API version)
    ══════════════════════════════════════════════════════════════ */
-
-// Tidak ada seed data lagi — data nyata dari localStorage
 
 var perPage     = 15;
 var currentPage = 1;
-var editIndex   = -1;
+var _cachedData = [];
+
+async function loadData() {
+  _cachedData = await simpro_ambilSemuaDistribusi();
+}
 
 function totalPages() {
-  return Math.ceil(simpro_ambilSemuaDistribusi().length / perPage);
+  return Math.ceil(_cachedData.length / perPage);
 }
 
 // ══ Render tabel ══
-function renderTable() {
-  // ← INI YANG BERUBAH: dulu var allData = seed dummy, sekarang baca dari localStorage
-  var allData = simpro_ambilSemuaDistribusi();
-  var tbody   = document.getElementById('distribusiTableBody');
+async function renderTable() {
+  await loadData();
+  var tbody = document.getElementById('distribusiTableBody');
   tbody.innerHTML = '';
 
-  if (allData.length === 0) {
+  if (_cachedData.length === 0) {
     tbody.innerHTML =
       '<tr><td colspan="6" style="text-align:center;padding:32px;color:#aaa;font-style:italic;">' +
       'Belum ada data distribusi. Tambahkan distribusi baru.</td></tr>';
@@ -38,26 +29,32 @@ function renderTable() {
   }
 
   var start    = (currentPage - 1) * perPage;
-  var end      = Math.min(start + perPage, allData.length);
-  var pageData = allData.slice(start, end);
+  var end      = Math.min(start + perPage, _cachedData.length);
+  var pageData = _cachedData.slice(start, end);
 
-  pageData.forEach(function(row, idx) {
-    var realIdx = start + idx;
+  pageData.forEach(function(row) {
+    var rowId = row.id; // gunakan ID dari database
+    var tglDistrib = row.tgl_distribusi || row.tglDistribusi || '-';
+    var tglProd    = row.tgl_produksi   || row.tglProduksi   || '-';
+
+    // Format tanggal untuk tampilan (DD/MM/YY)
+    if (tglDistrib) tglDistrib = simpro_isoToDMY(tglDistrib.split('T')[0]);
+    if (tglProd)    tglProd    = simpro_isoToDMY(tglProd.split('T')[0]);
+
     var tr = document.createElement('tr');
     tr.innerHTML =
-      '<td>' + (row.tglDistribusi || '-') + '</td>' +
-      '<td>' + (row.pelanggan     || '-') + '</td>' +
-      '<td>' + (row.tglProduksi   || '-') + '</td>' +
-      '<td>' + (row.jumlah        || 0)   + '</td>' +
+      '<td>' + tglDistrib + '</td>' +
+      '<td>' + (row.pelanggan || '-') + '</td>' +
+      '<td>' + tglProd + '</td>' +
+      '<td>' + (row.jumlah || 0) + '</td>' +
       '<td>' +
-        "<button class='edit-btn' onclick='openModal(" + realIdx + ")' title='Edit'>" +
+        "<button class='edit-btn' onclick='openModal(" + rowId + ")' title='Edit'>" +
           "<svg width='15' height='15' fill='none' stroke='currentColor' stroke-width='1.8' viewBox='0 0 24 24'>" +
             "<path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/>" +
             "<path d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/>" +
           '</svg>' +
         '</button> ' +
-        // ← TOMBOL HAPUS (baru)
-        "<button class='edit-btn' onclick='konfirmasiHapus(" + realIdx + ")' title='Hapus' style='color:#c0392b;margin-left:4px;'>" +
+        "<button class='edit-btn' onclick='konfirmasiHapus(" + rowId + ")' title='Hapus' style='color:#c0392b;margin-left:4px;'>" +
           "<svg width='15' height='15' fill='none' stroke='currentColor' stroke-width='1.8' viewBox='0 0 24 24'>" +
             "<polyline points='3 6 5 6 21 6'/>" +
             "<path d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6'/>" +
@@ -66,7 +63,7 @@ function renderTable() {
         '</button>' +
       '</td>' +
       '<td>' +
-        "<select class='status-select " + _statusClass(row.status) + "' onchange='updateStatus(" + realIdx + ", this.value)'>" +
+        "<select class='status-select " + _statusClass(row.status) + "' onchange='updateStatus(" + rowId + ", this.value)'>" +
           optionsHtml(row.status) +
         '</select>' +
       '</td>';
@@ -76,7 +73,6 @@ function renderTable() {
   renderPagination();
 }
 
-// ── Status CSS class ──
 function _statusClass(status) {
   switch (status) {
     case 'Sudah Terkirim': return 'status-terkirim';
@@ -85,31 +81,62 @@ function _statusClass(status) {
   }
 }
 
-// ← INI YANG BERUBAH: 3 status sesuai konsep (bukan Dikirim/Selesai/Pending/Dibatalkan)
 function optionsHtml(selected) {
-  var opts = ['Belum Dikirim', 'Sedang Dikirim', 'Sudah Terkirim'];
-  return opts.map(function(o) {
+  return ['Belum Dikirim', 'Sedang Dikirim', 'Sudah Terkirim'].map(function(o) {
     return "<option value='" + o + "'" + (o === selected ? ' selected' : '') + '>' + o + '</option>';
   }).join('');
 }
 
-// ← INI YANG BERUBAH: dulu hanya update array lokal, sekarang via shared.js
-function updateStatus(i, val) {
-  simpro_updateDistribusi(i, { status: val });
-  renderTable(); // re-render agar warna badge ikut berubah
+async function updateStatus(id, val) {
+  var hasil = await simpro_updateDistribusi(id, { status: val });
+  if (hasil && hasil.error) {
+    showToast('Gagal update status: ' + hasil.error);
+    return;
+  }
+  // Update cache lokal langsung tanpa fetch ulang
+  var idx = _cachedData.findIndex(function(d) { return d.id === id; });
+  if (idx !== -1) _cachedData[idx].status = val;
+  // Re-render dari cache yang sudah diupdate
+  var tbody = document.getElementById('distribusiTableBody');
+  tbody.innerHTML = '';
+  var start    = (currentPage - 1) * perPage;
+  var end      = Math.min(start + perPage, _cachedData.length);
+  var pageData = _cachedData.slice(start, end);
+  pageData.forEach(function(row) {
+    var rowId = row.id;
+    var tglDistrib = row.tgl_distribusi || '-';
+    var tglProd    = row.tgl_produksi   || '-';
+    if (tglDistrib) tglDistrib = simpro_isoToDMY(tglDistrib.split('T')[0]);
+    if (tglProd)    tglProd    = simpro_isoToDMY(tglProd.split('T')[0]);
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + tglDistrib + '</td>' +
+      '<td>' + (row.pelanggan || '-') + '</td>' +
+      '<td>' + tglProd + '</td>' +
+      '<td>' + (row.jumlah || 0) + '</td>' +
+      '<td>' +
+        "<button class='edit-btn' onclick='openModal(" + rowId + ")' title='Edit'>✏️</button> " +
+        "<button class='edit-btn' onclick='konfirmasiHapus(" + rowId + ")' title='Hapus' style='color:#c0392b;margin-left:4px;'>🗑️</button>" +
+      '</td>' +
+      '<td>' +
+        "<select class='status-select " + _statusClass(row.status) + "' onchange='updateStatus(" + rowId + ", this.value)'>" +
+          optionsHtml(row.status) +
+        '</select>' +
+      '</td>';
+    tbody.appendChild(tr);
+  });
   showToast('Status diperbarui: ' + val);
 }
 
-// ── Hapus distribusi (baru) ──
-function konfirmasiHapus(i) {
+async function konfirmasiHapus(id) {
   if (!confirm('Hapus data distribusi ini? Stok akan dikembalikan.')) return;
-  simpro_hapusDistribusi(i);
+  await simpro_hapusDistribusi(id);
   if (currentPage > totalPages()) currentPage = Math.max(1, totalPages());
-  renderTable();
+  await renderTable();
   showToast('Data dihapus dan stok dikembalikan.');
 }
 
-// ══ Render pagination ══
+// ══ Pagination ══
 function renderPagination() {
   var pg    = document.getElementById('pagination');
   pg.innerHTML = '';
@@ -117,91 +144,59 @@ function renderPagination() {
   if (total <= 1) return;
 
   var prev = document.createElement('button');
-  prev.className   = 'page-btn';
-  prev.textContent = '‹';
-  prev.disabled    = currentPage === 1;
-  prev.onclick     = function() {
-    if (currentPage > 1) { currentPage--; renderTable(); }
-  };
+  prev.className = 'page-btn'; prev.textContent = '‹'; prev.disabled = currentPage === 1;
+  prev.onclick = async function() { if (currentPage > 1) { currentPage--; await renderTable(); } };
   pg.appendChild(prev);
 
-  [1, 2, 3].forEach(function(p) {
+  [1,2,3].forEach(function(p) {
     if (p > total) return;
     var btn = document.createElement('button');
-    btn.className   = 'page-btn' + (p === currentPage ? ' active' : '');
+    btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
     btn.textContent = p;
-    btn.onclick     = (function(page) {
-      return function() { currentPage = page; renderTable(); };
-    })(p);
+    btn.onclick = (function(page) { return async function() { currentPage = page; await renderTable(); }; })(p);
     pg.appendChild(btn);
   });
 
   if (total > 4) {
-    var dots = document.createElement('span');
-    dots.className   = 'page-dots';
-    dots.textContent = '...';
+    var dots = document.createElement('span'); dots.className = 'page-dots'; dots.textContent = '...';
     pg.appendChild(dots);
   }
-
   if (total > 3) {
     var lastBtn = document.createElement('button');
-    lastBtn.className   = 'page-btn' + (total === currentPage ? ' active' : '');
+    lastBtn.className = 'page-btn' + (total === currentPage ? ' active' : '');
     lastBtn.textContent = total;
-    lastBtn.onclick     = function() { currentPage = total; renderTable(); };
+    lastBtn.onclick = async function() { currentPage = total; await renderTable(); };
     pg.appendChild(lastBtn);
   }
 
   var next = document.createElement('button');
-  next.className   = 'page-btn';
-  next.textContent = '›';
-  next.disabled    = currentPage === total;
-  next.onclick     = function() {
-    if (currentPage < total) { currentPage++; renderTable(); }
-  };
+  next.className = 'page-btn'; next.textContent = '›'; next.disabled = currentPage === total;
+  next.onclick = async function() { if (currentPage < total) { currentPage++; await renderTable(); } };
   pg.appendChild(next);
 }
 
-// ══ Modal Edit cepat ══
-function openModal(i) {
-  // Redirect ke halaman edit lengkap (sesuai commit baru)
-  window.location.href = '../distribusi/edit/edit.html?id=' + i;
+// ══ Modal Edit → redirect ke halaman edit ══
+function openModal(id) {
+  window.location.href = '../distribusi/edit/edit.html?id=' + id;
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
-  editIndex = -1;
 }
 
-function saveEdit() {
-  if (editIndex < 0) return;
-  // ← INI YANG BERUBAH: dulu update array lokal saja
-  simpro_updateDistribusi(editIndex, {
-    pelanggan: document.getElementById('editPelanggan').value,
-    jumlah   : parseInt(document.getElementById('editJumlah').value) || 0,
-    status   : document.getElementById('editStatus').value
-  });
-  closeModal();
-  renderTable();
-  showToast('Distribusi berhasil diperbarui!');
-}
-
-// ══ Modal Buat Baru (shortcut) ══
+// ══ Modal Buat Baru ══
 function openModalBuat() {
-  var today = new Date();
-  var iso   = today.toISOString().split('T')[0];
-  document.getElementById('buatTanggal').value     = iso;
-  document.getElementById('buatTanggalProd').value = iso;
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('buatTanggal').value     = today;
+  document.getElementById('buatTanggalProd').value = today;
   document.getElementById('buatPelanggan').value   = '';
   document.getElementById('buatJumlah').value      = '';
   document.getElementById('buatStatus').value      = 'Belum Dikirim';
   document.getElementById('modalBuat').classList.add('show');
 }
 
-function closeBuat() {
-  document.getElementById('modalBuat').classList.remove('show');
-}
+function closeBuat() { document.getElementById('modalBuat').classList.remove('show'); }
 
-// ← INI YANG BERUBAH: redirect ke form tambah lengkap agar stok tervalidasi
 function simpanBuat() {
   closeBuat();
   window.location.href = '../distribusi/tambah/tambah.html';
@@ -215,36 +210,28 @@ function showToast(msg) {
   setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
 
+function logout() { simpro_logout(); }
+
 // ══ Init ══
-window.onload = function() {
+window.onload = async function() {
   simpro_requireLogin();
-  renderTable();
+  await renderTable();
   ['modalOverlay', 'modalBuat'].forEach(function(id) {
     var el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('click', function(e) {
-        if (e.target === this) {
-          this.classList.remove('show');
-          editIndex = -1;
-        }
-      });
-    }
+    if (el) el.addEventListener('click', function(e) {
+      if (e.target === this) { this.classList.remove('show'); }
+    });
   });
+  setupMobileNav();
 };
-
-function logout() {
-  simpro_logout();
-}
 
 function setupMobileNav() {
   const hamburger = document.getElementById('hamburger');
   if (!hamburger) return;
-
   let drawer = document.getElementById('navDrawer');
   if (!drawer) {
     drawer = document.createElement('div');
-    drawer.id = 'navDrawer';
-    drawer.className = 'nav-drawer';
+    drawer.id = 'navDrawer'; drawer.className = 'nav-drawer';
     drawer.innerHTML = `
       <a href="../dashboard/index.html">Beranda</a>
       <a href="../produksi/index.html">Produksi</a>
@@ -263,15 +250,9 @@ function setupMobileNav() {
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
-
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
-    if (isOpen) {
-      drawer.classList.add('open');
-    } else {
-      drawer.classList.remove('open');
-    }
+    drawer.classList.toggle('open', isOpen);
   });
 }
-
 document.addEventListener('DOMContentLoaded', setupMobileNav);

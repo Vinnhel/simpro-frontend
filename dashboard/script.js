@@ -1,7 +1,6 @@
-// ══ Guard login ══
-// Dashboard harus dilindungi — jika belum login, redirect ke login
+// ══ Guard login — cek JWT token ══
 window.addEventListener('DOMContentLoaded', function() {
-  if (localStorage.getItem('isLogin') !== 'true') {
+  if (!localStorage.getItem('simpro_token')) {
     window.location.href = '../login/index.html';
     return;
   }
@@ -9,36 +8,31 @@ window.addEventListener('DOMContentLoaded', function() {
 
 // Smooth Scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener("click", function(e) {
+  anchor.addEventListener('click', function(e) {
     e.preventDefault();
-    document.querySelector(this.getAttribute("href"))
-      .scrollIntoView({ behavior: "smooth" });
+    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
   });
 });
 
 // Scroll Reveal
-const elements = document.querySelectorAll("section, .card");
+const elements = document.querySelectorAll('section, .card');
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add("show");
-  });
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('show'); });
 });
-elements.forEach(el => { el.classList.add("fade"); observer.observe(el); });
+elements.forEach(el => { el.classList.add('fade'); observer.observe(el); });
 
 function logout() {
-  localStorage.removeItem("isLogin");
-  window.location.href = "../login/index.html";
+  localStorage.removeItem('simpro_token');
+  window.location.href = '../login/index.html';
 }
 
 function setupMobileNav() {
   const hamburger = document.getElementById('hamburger');
   if (!hamburger) return;
-
   let drawer = document.getElementById('navDrawer');
   if (!drawer) {
     drawer = document.createElement('div');
-    drawer.id = 'navDrawer';
-    drawer.className = 'nav-drawer';
+    drawer.id = 'navDrawer'; drawer.className = 'nav-drawer';
     drawer.innerHTML = `
       <a href="#" class="nav-active">Beranda</a>
       <a href="../produksi/index.html">Produksi</a>
@@ -57,7 +51,6 @@ function setupMobileNav() {
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
-
   hamburger.addEventListener('click', () => {
     const isOpen = hamburger.classList.toggle('open');
     drawer.classList.toggle('open', isOpen);

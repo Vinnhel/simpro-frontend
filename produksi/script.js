@@ -1,24 +1,15 @@
-// ── DATA BAHAN BAKU (sama persis dengan original, tidak diganti) ──
+// ── DATA BAHAN BAKU ──────────────────────────────────────────────
 var produkData = {
-  tahu_bulat_cimol: [
-    { nama: "Kacang Kedelai", satuan: "kg",  kebutuhan: 50, harga: 4200  },
-  ],
-  tahu_bulat_standar: [
-    { nama: "Kacang Kedelai", satuan: "kg",  kebutuhan: 50, harga: 15000  },
-  ],
-  tahu_bulat_jumbo: [
-    { nama: "Kacang Kedelai", satuan: "kg",  kebutuhan: 50, harga: 17000  },
-  ],
-  sotong: [
-    { nama: "Terigu + Tapioka", satuan: "kg",  kebutuhan: 10, harga: 1700  },
-  ]
+  tahu_bulat_cimol:   [{ nama: 'Kacang Kedelai',    satuan: 'kg', kebutuhan: 50, harga: 4200  }],
+  tahu_bulat_standar: [{ nama: 'Kacang Kedelai',    satuan: 'kg', kebutuhan: 50, harga: 15000 }],
+  tahu_bulat_jumbo:   [{ nama: 'Kacang Kedelai',    satuan: 'kg', kebutuhan: 50, harga: 17000 }],
+  sotong:             [{ nama: 'Terigu + Tapioka',  satuan: 'kg', kebutuhan: 10, harga: 1700  }]
 };
 
-// ══ Render tabel bahan sesuai produk dipilih ══
+// ══ Render tabel bahan ══
 function renderTable() {
   var key   = document.getElementById('produkSelect').value;
   var tbody = document.getElementById('tableBody');
-
   tbody.innerHTML = '';
   document.getElementById('outEstimasi').textContent = '';
   document.getElementById('outBiaya').textContent    = '';
@@ -26,128 +17,95 @@ function renderTable() {
   if (!key || !produkData[key]) {
     var tr = document.createElement('tr');
     var td = document.createElement('td');
-    td.colSpan         = 5;
-    td.style.textAlign = 'center';
-    td.style.padding   = '24px';
-    td.style.color     = '#999';
-    td.style.fontStyle = 'italic';
-    td.textContent     = 'Silakan pilih produk terlebih dahulu.';
-    tr.appendChild(td);
-    tbody.appendChild(tr);
+    td.colSpan = 5; td.style.textAlign = 'center';
+    td.style.padding = '24px'; td.style.color = '#999'; td.style.fontStyle = 'italic';
+    td.textContent = 'Silakan pilih produk terlebih dahulu.';
+    tr.appendChild(td); tbody.appendChild(tr);
     return;
   }
 
-  var bahan = produkData[key];
+  produkData[key].forEach(function(b) {
+    var tr = document.createElement('tr');
+    var input = document.createElement('input');
+    input.type = 'number'; input.min = '0'; input.step = 'any';
+    input.placeholder = 'Input Jumlah'; input.className = 'stok-input';
 
-  for (var i = 0; i < bahan.length; i++) {
-    var b = bahan[i];
-
-    var tr       = document.createElement('tr');
-    var tdNama   = document.createElement('td');
-    var tdSatuan = document.createElement('td');
-    var tdKebu   = document.createElement('td');
-    var tdHarga  = document.createElement('td');
-    var tdStok   = document.createElement('td');
-
-    tdNama.textContent   = b.nama;
-    tdSatuan.textContent = b.satuan;
-    tdKebu.textContent   = b.kebutuhan;
-    tdHarga.textContent  = 'Rp ' + b.harga.toLocaleString('id-ID');
-
-    var input         = document.createElement('input');
-    input.type        = 'number';
-    input.min         = '0';
-    input.step        = 'any';
-    input.placeholder = 'Input Jumlah';
-    input.className   = 'stok-input';
-
+    tr.innerHTML =
+      '<td>' + b.nama + '</td>' +
+      '<td>' + b.satuan + '</td>' +
+      '<td>' + b.kebutuhan + '</td>' +
+      '<td>Rp ' + b.harga.toLocaleString('id-ID') + '</td>';
+    var tdStok = document.createElement('td');
     tdStok.appendChild(input);
-    tr.appendChild(tdNama);
-    tr.appendChild(tdSatuan);
-    tr.appendChild(tdKebu);
-    tr.appendChild(tdHarga);
     tr.appendChild(tdStok);
     tbody.appendChild(tr);
-  }
+  });
 }
 
 // ══ Hitung estimasi & biaya ══
 function hitung() {
   var key = document.getElementById('produkSelect').value;
-
-  if (!key || !produkData[key]) {
-    showToast('Pilih produk terlebih dahulu!');
-    return;
-  }
+  if (!key || !produkData[key]) { showToast('Pilih produk terlebih dahulu!'); return; }
 
   var bahan  = produkData[key];
   var inputs = document.querySelectorAll('.stok-input');
-
-  if (inputs.length === 0) {
-    showToast('Tabel bahan belum tersedia!');
-    return;
-  }
+  if (inputs.length === 0) { showToast('Tabel bahan belum tersedia!'); return; }
 
   var estimasi = Infinity;
-
   for (var i = 0; i < inputs.length; i++) {
     var nilaiStr = inputs[i].value.trim();
     if (nilaiStr === '') continue;
-
     var stokNilai = parseFloat(nilaiStr);
     if (isNaN(stokNilai) || stokNilai < 0) stokNilai = 0;
-
     var kebutuhan = bahan[i].kebutuhan;
     if (kebutuhan > 0) {
       var bisa = Math.floor(stokNilai / kebutuhan);
       if (bisa < estimasi) estimasi = bisa;
     }
   }
-
   if (!isFinite(estimasi) || isNaN(estimasi)) estimasi = 0;
 
   var totalBiaya = 0;
   for (var j = 0; j < bahan.length; j++) {
     totalBiaya += bahan[j].kebutuhan * estimasi * bahan[j].harga;
   }
-  totalBiaya = Math.round(totalBiaya);
 
   document.getElementById('outEstimasi').textContent = estimasi + ' produk';
-  document.getElementById('outBiaya').textContent    = 'Rp ' + totalBiaya.toLocaleString('id-ID');
+  document.getElementById('outBiaya').textContent    = 'Rp ' + Math.round(totalBiaya).toLocaleString('id-ID');
 }
 
-// ══ Reset semua input ══
 function reset() {
-  var inputs = document.querySelectorAll('.stok-input');
-  for (var i = 0; i < inputs.length; i++) {
-    inputs[i].value = '';
-  }
+  document.querySelectorAll('.stok-input').forEach(function(i) { i.value = ''; });
   document.getElementById('outEstimasi').textContent = '';
   document.getElementById('outBiaya').textContent    = '';
 }
 
-// ══ Simpan hasil → masuk ke stok produksi ══
-// INI SATU-SATUNYA YANG BERUBAH DARI ORIGINAL:
-// dulu hanya showToast, sekarang juga memanggil simpro_simpanHasilProduksi()
-function simpan() {
-  var key = document.getElementById("produkSelect").value;
-  var est = document.getElementById("outEstimasi").textContent.trim();
+// ══ Simpan hasil → POST ke backend ══
+async function simpan() {
+  var key = document.getElementById('produkSelect').value;
+  var est = document.getElementById('outEstimasi').textContent.trim();
 
-  if (est === "") {
-    showToast("Hitung terlebih dahulu sebelum menyimpan!");
-    return;
-  }
+  if (est === '') { showToast('Hitung terlebih dahulu sebelum menyimpan!'); return; }
 
   var jumlah = parseInt(est, 10);
-  var biaya  = document.getElementById("outBiaya").textContent.trim();
+  var biaya  = document.getElementById('outBiaya').textContent.trim();
 
-  // Simpan ke localStorage "stokData" via shared.js
-  simpro_simpanHasilProduksi(key, jumlah, biaya);
+  var btn = document.getElementById('btnSimpan');
+  if (btn) { btn.disabled = true; btn.textContent = 'Menyimpan...'; }
 
-  showToast("Hasil perhitungan disimpan! " + jumlah + " pcs masuk ke stok.");
+  try {
+    var hasil = await simpro_simpanHasilProduksi(key, jumlah, biaya);
+    if (hasil && hasil.error) {
+      showToast('Gagal: ' + hasil.error);
+    } else {
+      showToast('Hasil perhitungan disimpan! ' + jumlah + ' pcs masuk ke stok.');
+    }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Simpan'; }
+  }
 }
 
-// ══ Toast notifikasi ══
+// ══ Toast ══
 function showToast(pesan) {
   var toast = document.getElementById('toast');
   toast.textContent = pesan;
@@ -165,7 +123,6 @@ window.onload = function() {
 function setupMobileNav() {
   const hamburger = document.getElementById('hamburger');
   if (!hamburger) return;
-
   let drawer = document.getElementById('navDrawer');
   if (!drawer) {
     drawer = document.createElement('div');
@@ -189,8 +146,6 @@ function setupMobileNav() {
     `;
     document.getElementById('navbar').insertAdjacentElement('afterend', drawer);
   }
-
-  // Guard: pasang listener hanya sekali
   if (!hamburger.dataset.listenerSet) {
     hamburger.dataset.listenerSet = 'true';
     hamburger.addEventListener('click', () => {
@@ -199,4 +154,3 @@ function setupMobileNav() {
     });
   }
 }
-
