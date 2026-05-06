@@ -7,7 +7,7 @@
    ══════════════════════════════════════════════════════════════ */
 
 // ── CONFIG API ───────────────────────────────────────────────────
-var API = 'http://localhost:3000/api';  // ganti ke URL backend jika beda
+var API = 'https://isaiah-aphacic-tropologically.ngrok-free.dev/api';
 
 function simpro_getToken() {
   return localStorage.getItem('simpro_token');
